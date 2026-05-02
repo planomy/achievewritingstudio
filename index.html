@@ -802,8 +802,9 @@
       flex-direction: column;
       gap: 0.65rem;
     }
+    /* Bank slot within this skill + level (1–10); not display order — teachers can spot duplicate numbers. */
     .sentence-card::before {
-      content: attr(data-index);
+      content: attr(data-example-num);
       position: absolute;
       top: 1rem;
       right: 1rem;
@@ -2627,10 +2628,13 @@
       return Array.isArray(pool) ? pool : [];
     }
 
-    function pickFour(pool) {
-      const copy = [...pool];
+    /** Random sample with each item’s 1-based index in the original pool (category = skill + level). */
+    function pickRandomFromPool(pool, count) {
+      const tagged = pool.map((text, i) => ({ plain: text, poolIndex: i + 1 }));
+      const copy = [...tagged];
       const out = [];
-      while (out.length < 4 && copy.length) {
+      const n = Math.min(count, copy.length);
+      while (out.length < n && copy.length) {
         const i = Math.floor(Math.random() * copy.length);
         out.push(copy.splice(i, 1)[0]);
       }
@@ -2638,7 +2642,13 @@
     }
 
     function getAnnotatedExamples(skillId, level) {
-      return pickFour(getExamplePool(skillId, level)).map((plain) => annotateSentence(skillId, plain));
+      const pool = getExamplePool(skillId, level);
+      const poolSize = pool.length;
+      return pickRandomFromPool(pool, 4).map(({ plain, poolIndex }) => ({
+        text: annotateSentence(skillId, plain),
+        exampleNum: poolIndex,
+        poolSize,
+      }));
     }
 
     /** Renders raw string; **double asterisks** mark offending chunks for the class (shown in red). */
@@ -2943,10 +2953,17 @@
     function renderSentences(list) {
       sentenceGrid.innerHTML = "";
       const plainCards = SKILLS_PLAIN_CARDS.has(selectedId);
-      list.forEach((text, i) => {
+      list.forEach((item) => {
+        const text = typeof item === "string" ? item : item.text;
+        const exampleNum = typeof item === "string" ? null : item.exampleNum;
+        const poolSize = typeof item === "string" ? null : item.poolSize;
         const card = document.createElement("article");
         card.className = "sentence-card";
-        card.dataset.index = String(i + 1);
+        if (exampleNum != null) {
+          card.dataset.exampleNum = String(exampleNum);
+          const total = poolSize != null && poolSize > 0 ? poolSize : 10;
+          card.setAttribute("aria-label", "Example " + exampleNum + " of " + total);
+        }
         const p = document.createElement("p");
         let raw = String(text);
         if (plainCards) raw = stripHighlightMarkers(raw);
