@@ -1604,7 +1604,7 @@
 
     const KEY_SKILLS = [
       { id: "predictable-starts", title: "Predictable starts", coreFix: "Rewrite sentence beginnings — avoid over-using The It A An He She His Her This They Then There at the start of a sentence." },
-      { id: "weak-be", title: 'Passive to-be verbs', coreFix: "Auxiliary verbs like was were is are has had have be been being and the n't variations can weaken expression." },
+      { id: "weak-be", title: 'Passive to-be verbs', coreFix: "Targets: was, were, hadn't, wasn't, weren't, had, have, haven't, be, been, being — tighten where they flatten energy." },
       { id: "basic-verbs", title: "Basic verb use", coreFix: "Choose precise, vivid verbs — one strong verb beats a pile of ordinary ones." },
       { id: "repetition", title: "Noun / verb repetition", coreFix: "Repeating key nouns or verbs in a sentence or adjacent sentences is lazy - use synonyms or restructure sentences." },
       { id: "weak-adjectives", title: "Weak adjectives", coreFix: "Push beyond colour and size — build doubles and triples that sharpen the image." },
@@ -2090,10 +2090,11 @@
           return "**" + pre.trimEnd() + "**" + s.slice(pre.length);
         }
       }
-      const theM = s.match(/^(The\s+\S+)/i);
-      if (theM) return "**" + theM[1] + "**" + s.slice(theM[1].length);
-      const pro = s.match(/^(He|She|It|They|We|You|I)\b/i);
-      if (pro) return "**" + pro[1] + "**" + s.slice(pro[1].length);
+      /* One starter token only (not "The fleet…") — matches skill list: The It A An He She His Her This They Then There + We You I */
+      const starter = s.match(
+        /^(The|There|Then|This|They|It|He|She|His|Her|We|You|I|A|An)\b/i
+      );
+      if (starter) return "**" + starter[1] + "**" + s.slice(starter[1].length);
       return s;
     }
 
@@ -2118,22 +2119,8 @@
       return wrapAllMatches(text, new RegExp("\\b(?:" + alt + ")\\b", "gi"));
     }
 
+    /** Weak adjectives only (single tokens). Multi-word collocations are not highlighted — avoids tagging nouns like moment, note, decision. */
     function annotateWeakAdjectives(text) {
-      const phrases = [
-        "big, old",
-        "dark and cold",
-        "calm, quiet manner",
-        "tall, thin man",
-        "dark and scary night",
-        "long and boring journey",
-        "big moment",
-        "good day",
-        "strange feeling",
-        "cold night",
-        "hard decision",
-        "short note",
-        "small office",
-      ];
       const words = [
         "big",
         "nice",
@@ -2169,7 +2156,8 @@
         "unwelcoming",
         "red",
       ];
-      const alt = [...phrases.map(escapeRegExp), ...words.map((w) => "\\b" + escapeRegExp(w) + "\\b")]
+      const alt = words
+        .map((w) => "\\b" + escapeRegExp(w) + "\\b")
         .sort((a, b) => b.length - a.length)
         .join("|");
       return wrapAllMatches(text, new RegExp("(" + alt + ")", "gi"));
@@ -2447,7 +2435,10 @@
         case "predictable-starts":
           return annotatePredictableStarts(text);
         case "weak-be":
-          return wrapAllMatches(text, /\b(was|were|is|are|am)\b/gi);
+          return wrapAllMatches(
+            text,
+            /\b(wasn't|weren't|hadn't|haven't|was|were|had|have|be|been|being)\b/gi
+          );
         case "basic-verbs":
           return wrapAllMatches(
             text,
