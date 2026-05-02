@@ -340,6 +340,21 @@
       min-width: 0;
     }
 
+    .main-footer {
+      flex-shrink: 0;
+      margin-top: auto;
+      padding-top: 1.15rem;
+      border-top: 1px solid color-mix(in srgb, var(--border-subtle) 70%, transparent);
+    }
+    .main-footer p {
+      margin: 0;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
     .main-toolbar {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto;
@@ -1451,6 +1466,10 @@
           </div>
         </div>
       </div>
+
+      <footer class="main-footer">
+        <p>© 2026 Achieve Writing Studio. All rights reserved.</p>
+      </footer>
     </main>
   </div>
 
