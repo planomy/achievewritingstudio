@@ -1,0 +1,2758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achieve — Key Skills Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0;700;1;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-display: "Fredoka", system-ui, sans-serif;
+      --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --shadow-soft: 0 18px 50px rgba(76, 29, 149, 0.12);
+      --shadow-shell: 0 25px 70px rgba(76, 29, 149, 0.14), 0 2px 0 rgba(255, 255, 255, 0.65) inset;
+      --shadow-card: 0 8px 32px rgba(17, 24, 39, 0.06);
+      --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-page: #ebe4f8;
+      --bg-shell: #ffffff;
+      --bg-sidebar: linear-gradient(165deg, #5b21b6 0%, #6d28d9 45%, #7c3aed 100%);
+      --bg-sidebar-item-hover: rgba(255, 255, 255, 0.12);
+      --bg-sidebar-item-active: rgba(255, 255, 255, 0.22);
+      --bg-main: #f8f7fc;
+      --bg-card: #ffffff;
+      --bg-hero: linear-gradient(125deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%);
+      --bg-input: #ffffff;
+      --bg-chip: #ede9fe;
+      --border-subtle: rgba(91, 33, 182, 0.14);
+      --text-primary: #1c1130;
+      --text-secondary: #5b5568;
+      --text-inverse: #ffffff;
+      --text-muted-inverse: rgba(255, 255, 255, 0.85);
+      --accent: #a855f7;
+      --accent-hot: #f472b6;
+      --ring: rgba(124, 58, 237, 0.35);
+      --offending: #c41e1e;
+      --offending-bg: rgba(220, 38, 38, 0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #0f0720;
+      --bg-shell: #1a0f2e;
+      --bg-sidebar: linear-gradient(165deg, #3b0764 0%, #4c1d95 50%, #5b21b6 100%);
+      --bg-sidebar-item-hover: rgba(255, 255, 255, 0.08);
+      --bg-sidebar-item-active: rgba(255, 255, 255, 0.16);
+      --bg-main: #13081f;
+      --bg-card: #231735;
+      --bg-hero: linear-gradient(125deg, #5b21b6 0%, #7c3aed 55%, #9333ea 100%);
+      --bg-input: #2d1b42;
+      --bg-chip: #362454;
+      --border-subtle: rgba(167, 139, 250, 0.2);
+      --text-primary: #f5f0ff;
+      --text-secondary: #c4b5d8;
+      --text-inverse: #ffffff;
+      --text-muted-inverse: rgba(255, 255, 255, 0.82);
+      --accent: #c084fc;
+      --accent-hot: #f9a8d4;
+      --ring: rgba(192, 132, 252, 0.45);
+      --offending: #fb7185;
+      --offending-bg: rgba(251, 113, 133, 0.14);
+      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.45);
+      --shadow-shell: 0 28px 80px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+      --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 15px; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      padding: clamp(0.75rem, 2vw, 1.5rem);
+      box-sizing: border-box;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: minmax(240px, 300px) 1fr;
+      min-height: calc(100vh - clamp(1.5rem, 4vw, 3rem));
+      align-items: stretch;
+      max-width: min(1920px, 100%);
+      margin: 0 auto;
+      background: var(--bg-shell);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-shell);
+      border: 1px solid color-mix(in srgb, var(--border-subtle) 55%, transparent);
+    }
+
+    @media (max-width: 960px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+    }
+
+    .sidebar {
+      background: var(--bg-sidebar);
+      color: var(--text-inverse);
+      padding: 1.05rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .brand {
+      display: flex;
+      justify-content: center;
+      padding: 0 0.21rem;
+    }
+    .brand-logo-frame {
+      width: 7.25rem;
+      height: 7.25rem;
+      flex-shrink: 0;
+      border-radius: 50%;
+      padding: 5px;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .brand-logo-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .skill-nav-label {
+      width: 100%;
+      font-size: calc(0.74rem + 3px);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      opacity: 0.72;
+      padding: 0 0.3rem;
+      text-align: center;
+    }
+    .skill-nav-label::after {
+      content: "";
+      display: block;
+      width: 75%;
+      height: 1px;
+      margin: 0.65rem auto 0;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(196, 181, 253, 0.35) 20%,
+        rgba(196, 181, 253, 0.5) 50%,
+        rgba(196, 181, 253, 0.35) 80%,
+        transparent
+      );
+      box-shadow: 0 0 12px rgba(167, 139, 250, 0.12);
+    }
+
+    .sidebar-level-wrap {
+      flex-shrink: 0;
+      width: 100%;
+      padding: 0 0.15rem;
+    }
+    .sidebar .level-options.level-segmented {
+      display: flex;
+      width: 100%;
+      align-items: stretch;
+      padding: 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      gap: 2px;
+      box-sizing: border-box;
+    }
+    .sidebar .level-segmented .level-choice {
+      margin: 0;
+      flex: 1;
+      min-width: 0;
+      padding: 0.32rem 0.35rem;
+      font-size: calc(0.68rem + 3px);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+      line-height: 1.25;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-muted-inverse);
+      box-shadow: none;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+      font-family: inherit;
+    }
+    .sidebar .level-segmented .level-choice:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+    .sidebar .level-segmented .level-choice[aria-pressed="true"] {
+      background: rgba(255, 255, 255, 0.92);
+      color: #5b21b6;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    .skill-list {
+      list-style: none;
+      margin: 0.85rem 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      overflow-y: auto;
+      flex: 1;
+      max-height: calc(100vh - 400px);
+      min-height: 0;
+    }
+
+    .sidebar-tenet {
+      flex-shrink: 0;
+      margin: 0;
+      padding: 0.75rem 0.45rem 0.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .sidebar-tenet-text {
+      margin: 0;
+      font-size: calc(0.72rem + 2px);
+      font-weight: 500;
+      line-height: 1.48;
+      color: var(--text-muted-inverse);
+      text-align: center;
+      font-style: italic;
+      hyphens: auto;
+      overflow-wrap: break-word;
+    }
+
+    .skill-btn {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      padding: 0.39rem 0.45rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      border-left: 4px solid transparent;
+      background: transparent;
+      color: inherit;
+      font-family: inherit;
+      font-size: calc(0.88rem + 3px);
+      text-align: left;
+      cursor: pointer;
+      transition: background var(--transition), transform 0.15s ease, border-color var(--transition), box-shadow var(--transition);
+    }
+    .skill-btn:hover { background: var(--bg-sidebar-item-hover); }
+    .skill-btn:active { transform: scale(0.98); }
+    .skill-btn[aria-current="true"] {
+      background: var(--bg-sidebar-item-active);
+      font-weight: 600;
+      border-left-color: var(--accent-hot);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+    .skill-num {
+      flex-shrink: 0;
+      width: 1.65rem;
+      height: 1.65rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: calc(0.75rem + 3px);
+    }
+    .skill-btn[aria-current="true"] .skill-num {
+      background: var(--accent-hot);
+      color: #4a044e;
+    }
+    /* Pasted paragraph matched this key skill (combined scan) */
+    .skill-btn.skill-paste-hit {
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .skill-btn.skill-paste-hit .skill-num {
+      background: rgba(251, 113, 133, 0.45);
+      color: #1a0520;
+      font-weight: 800;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75);
+    }
+    .skill-btn.skill-paste-hit[aria-current="true"] {
+      background: var(--bg-sidebar-item-active);
+    }
+    .skill-btn.skill-paste-hit[aria-current="true"] .skill-num {
+      background: var(--accent-hot);
+      color: #4a044e;
+    }
+    .skill-btn.skill-paste-filter-active {
+      outline: 2px solid rgba(255, 255, 255, 0.95);
+      outline-offset: 2px;
+    }
+
+    .main {
+      --main-pad-x: 2rem;
+      padding: 0.35rem var(--main-pad-x) 1.75rem;
+      background: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      overflow-x: hidden;
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .main-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem 1rem;
+      padding: 0.35rem 0 0.85rem;
+      overflow: visible;
+      position: relative;
+      z-index: 4;
+    }
+    .main-toolbar-cluster {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .main-toolbar-cluster.main-toolbar-cluster--primary {
+      flex: 1;
+      min-width: 0;
+      justify-content: flex-start;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--bg-card);
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+    }
+    .control-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    input[type="range"] {
+      width: 120px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .icon-btn {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 1.05rem;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      box-shadow: var(--shadow-card);
+    }
+    .main-toolbar-cluster .icon-btn[data-tip] {
+      position: relative;
+      overflow: visible;
+    }
+    .main-toolbar-cluster .icon-btn[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 13px);
+      transform: translateX(-50%) translateY(-4px);
+      padding: 0.42rem 0.72rem;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(145deg, color-mix(in srgb, var(--bg-card) 96%, var(--accent)), var(--bg-card));
+      color: var(--text-primary);
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border-subtle));
+      box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 18%, transparent), var(--shadow-card);
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      line-height: 1.25;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 50;
+      transition: opacity 0.08s ease, transform 0.08s ease, visibility 0s linear 0.12s;
+    }
+    .main-toolbar-cluster .icon-btn[data-tip]::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 3px);
+      transform: translateX(-50%);
+      border-style: solid;
+      border-width: 0 7px 8px 7px;
+      border-color: transparent transparent color-mix(in srgb, var(--accent) 28%, var(--border-subtle))
+        transparent;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 52;
+      pointer-events: none;
+      transition: opacity 0.08s ease, visibility 0s linear 0.12s;
+    }
+    .main-toolbar-cluster .icon-btn[data-tip]:hover::after,
+    .main-toolbar-cluster .icon-btn[data-tip]:focus-visible::after,
+    .main-toolbar-cluster .icon-btn[data-tip]:hover::before,
+    .main-toolbar-cluster .icon-btn[data-tip]:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+    }
+    .main-toolbar-cluster .icon-btn[data-tip]:hover::after,
+    .main-toolbar-cluster .icon-btn[data-tip]:focus-visible::after {
+      transform: translateX(-50%) translateY(0);
+    }
+    .icon-btn:hover { transform: translateY(-1px); }
+    .main-toolbar-cluster .icon-btn[data-tip]:hover,
+    .main-toolbar-cluster .icon-btn[data-tip]:focus-visible {
+      transform: translateY(-1px);
+    }
+    .icon-btn:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    .skill-banner {
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0 0 0.85rem;
+      background: var(--bg-hero);
+      border-radius: var(--radius-md);
+      padding: 1.35rem 1.75rem 1.45rem;
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .skill-banner::after {
+      content: "";
+      position: absolute;
+      right: -15%;
+      top: -80%;
+      width: 45%;
+      height: 220%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .skill-banner-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      align-items: flex-start;
+      min-width: 0;
+    }
+    .skill-banner-head-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 0.65rem;
+      width: 100%;
+      min-width: 0;
+    }
+    .skill-tip-trigger {
+      flex-shrink: 0;
+      width: 2.55rem;
+      height: 2.55rem;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.42);
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 1.28rem;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background var(--transition), transform 0.15s ease, border-color var(--transition);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    }
+    .skill-tip-trigger:hover {
+      background: rgba(255, 255, 255, 0.26);
+      border-color: rgba(255, 255, 255, 0.55);
+    }
+    .skill-tip-trigger:active {
+      transform: scale(0.96);
+    }
+    .skill-tip-trigger:focus-visible {
+      outline: 3px solid rgba(255, 255, 255, 0.85);
+      outline-offset: 3px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.42rem 1.1rem;
+      border-radius: 999px;
+      font-size: clamp(0.98rem, 1.85vw, 1.22rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+      line-height: 1.25;
+      text-wrap: balance;
+    }
+    .hero-badge-star {
+      flex-shrink: 0;
+      font-size: 1.05em;
+      line-height: 1;
+      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+    }
+    .skill-banner p.explanation {
+      margin: 0;
+      padding-left: calc(2ch + 4px);
+      font-size: clamp(1.02rem, 1.9vw, 1.28rem);
+      line-height: 1.45;
+      color: var(--text-muted-inverse);
+      max-width: 62em;
+      font-weight: 500;
+    }
+    .level-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 5.25rem));
+      gap: 0.35rem;
+      width: auto;
+      flex-shrink: 0;
+    }
+    .level-choice {
+      font-family: var(--font-display);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.48rem 0.35rem;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      cursor: pointer;
+      line-height: 1.2;
+      text-align: center;
+      white-space: normal;
+      min-width: 0;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .level-choice:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .level-choice[aria-pressed="true"] {
+      background: #fff;
+      color: #5b21b6;
+      border-color: #fff;
+    }
+
+    .btn-primary {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      background: #fff;
+      color: #5b21b6;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); }
+    .btn-primary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .exercise-region {
+      --exercise-fs-scale: 1;
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .exercise-region[hidden] {
+      display: none !important;
+    }
+    .exercise-stack {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      gap: 0.85rem;
+    }
+    .sentence-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.35rem;
+      flex: 1;
+      min-height: 12rem;
+      align-content: start;
+    }
+    .sentence-grid:empty {
+      min-height: clamp(11rem, 28vh, 18rem);
+      padding: 1.5rem 1.25rem;
+      background: color-mix(in srgb, var(--bg-card) 72%, var(--bg-main));
+      border-radius: var(--radius-md);
+      border: 1px dashed color-mix(in srgb, var(--border-subtle) 80%, transparent);
+    }
+    @media (max-width: 560px) {
+      .sentence-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .teacher-example-footer {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+      width: 100%;
+      padding-bottom: 0.25rem;
+    }
+    .teacher-example-add {
+      width: 3.35rem;
+      height: 3.35rem;
+      border-radius: 999px;
+      border: 2px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--accent);
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow-card);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .teacher-example-add:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--border-subtle));
+      box-shadow: var(--shadow-soft);
+    }
+    .teacher-example-add:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 3px;
+    }
+    .teacher-example-panel {
+      width: 100%;
+      max-width: min(56rem, 100%);
+    }
+    .teacher-example-input {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: clamp(5.5rem, 14vh, 10rem);
+      padding: 1.05rem 1.2rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-weight: 600;
+      line-height: 1.45;
+      resize: vertical;
+      font-size: clamp(
+        calc(1.45rem * var(--exercise-fs-scale, 1)),
+        calc(3.2vw * var(--exercise-fs-scale, 1)),
+        calc(2.55rem * var(--exercise-fs-scale, 1))
+      );
+    }
+    .teacher-example-input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.85;
+    }
+    .teacher-example-input:focus {
+      outline: none;
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--border-subtle));
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+
+    .sentence-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 1.65rem 1.75rem;
+      border: 2px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      min-height: 9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .sentence-card::before {
+      content: attr(data-index);
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: calc(2.25rem * var(--exercise-fs-scale, 1));
+      color: var(--accent);
+      opacity: 0.35;
+      line-height: 1;
+    }
+    .sentence-card p {
+      margin: 0;
+      font-size: clamp(
+        calc(1.35rem * var(--exercise-fs-scale, 1)),
+        calc(2.8vw * var(--exercise-fs-scale, 1)),
+        calc(2.35rem * var(--exercise-fs-scale, 1))
+      );
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--text-primary);
+      padding-right: 2.75rem;
+    }
+    .sentence-card p .offending {
+      color: var(--offending);
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, var(--offending) 55%, transparent);
+      text-underline-offset: 0.12em;
+      background: var(--offending-bg);
+      border-radius: 0.15em;
+      padding: 0.03em 0.08em;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .paste-panel {
+      --exercise-fs-scale: 1;
+      box-sizing: border-box;
+      width: 80%;
+      max-width: 100%;
+      align-self: center;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      padding: 1.85rem 2.35rem 2.35rem;
+    }
+    @media (max-width: 720px) {
+      .paste-panel {
+        width: 100%;
+      }
+    }
+    /* Avoid overriding [hidden]: browser display:none loses to .paste-panel { display:flex } otherwise */
+    .paste-panel:not([hidden]) {
+      display: flex;
+      flex-direction: column;
+      gap: 1.45rem;
+    }
+    .paste-panel h4 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .paste-textarea {
+      box-sizing: border-box;
+      width: 100%;
+      /* Five lines at 36px writing (scaled), line-height 1.45, plus vertical padding and border */
+      min-height: calc(5 * 36px * 1.45 * var(--exercise-fs-scale, 1) + 2rem + 4px);
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: calc(36px * var(--exercise-fs-scale, 1));
+      line-height: 1.45;
+      resize: vertical;
+    }
+    .paste-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    .paste-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem 1.15rem;
+      padding-top: 0.15rem;
+    }
+    .paste-actions .btn-primary {
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+    .paste-actions .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+    .paste-actions .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .paste-skill-note {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      max-width: 28rem;
+      line-height: 1.4;
+    }
+    .paste-output {
+      min-height: 0;
+      padding-top: 0.35rem;
+    }
+    .paste-result-card {
+      min-height: unset;
+    }
+    .paste-result-card::before {
+      display: none;
+    }
+    .paste-result-card p {
+      padding-right: 0;
+      white-space: pre-wrap;
+    }
+
+    dialog.settings {
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 0;
+      max-width: 420px;
+      width: calc(100% - 2rem);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-soft);
+    }
+    dialog.settings::backdrop {
+      background: rgba(15, 7, 32, 0.55);
+      backdrop-filter: blur(4px);
+    }
+    .settings-inner {
+      padding: 1.5rem 1.75rem;
+    }
+    .settings h4 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+    }
+
+    .theme-menu-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .toolbar-theme-btn {
+      box-sizing: border-box;
+      height: 2.4rem;
+      padding: 0 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-card);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      white-space: nowrap;
+    }
+    .toolbar-theme-btn:hover {
+      transform: translateY(-1px);
+    }
+    .toolbar-theme-btn:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 2px;
+    }
+    .theme-menu-panel {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 6px);
+      min-width: 100%;
+      width: max-content;
+      padding: 0.35rem 0;
+      margin: 0;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-soft);
+      z-index: 80;
+    }
+    .theme-menu-panel[hidden] {
+      display: none !important;
+    }
+    .theme-menu-item {
+      display: block;
+      width: 100%;
+      padding: 0.55rem 1rem;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-align: left;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .theme-menu-item:hover,
+    .theme-menu-item:focus-visible {
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+    .theme-menu-item:focus-visible {
+      outline: none;
+    }
+    .theme-menu-item--active {
+      font-weight: 700;
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+    }
+
+    /* Fixed + JS pixel placement; UA :modal rules can otherwise anchor the dialog oddly. */
+    dialog.skill-tip-dialog[open] {
+      position: fixed !important;
+      margin: 0 !important;
+      inset: unset !important;
+      max-width: none;
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 0;
+      width: min(40rem, calc(100vw - 2.5rem));
+      height: fit-content;
+      max-height: min(92vh, 36rem);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-soft);
+    }
+    dialog.skill-tip-dialog::backdrop {
+      background: rgba(15, 7, 32, 0.5);
+      backdrop-filter: blur(5px);
+    }
+    .skill-tip-dialog-inner {
+      padding: 1.45rem 1.65rem 1.5rem;
+      max-height: min(70vh, 32rem);
+      overflow-y: auto;
+    }
+    dialog.skill-tip-dialog.skill-tip-dialog--author-stems {
+      width: min(75.504rem, calc(100vw - 2rem));
+      max-height: min(94vh, 48rem);
+    }
+    dialog.skill-tip-dialog.skill-tip-dialog--author-stems .skill-tip-stems-table {
+      font-size: 1.15rem;
+      line-height: 1.22;
+    }
+    dialog.skill-tip-dialog.skill-tip-dialog--author-stems .skill-tip-stems-table td {
+      padding: 0.43rem 0.26rem;
+    }
+    dialog.skill-tip-dialog.skill-tip-dialog--author-stems .skill-tip-dialog-inner {
+      max-height: none;
+      overflow: visible;
+      padding: 1rem 1.25rem 1.35rem;
+    }
+    dialog.skill-tip-dialog.skill-tip-dialog--author-stems .skill-tip-dialog-inner h4 {
+      font-size: 1.15rem;
+      margin-bottom: 0.35rem;
+    }
+    dialog.skill-tip-dialog.skill-tip-dialog--author-stems .skill-tip-intro {
+      margin: 0 0 0.55rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .skill-tip-dialog-inner h4 {
+      margin: 0 0 0.5rem;
+      font-family: var(--font-display);
+      font-size: 1.28rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--text-primary);
+    }
+    .skill-tip-dialog-inner .skill-tip-intro {
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .skill-tip-dialog-inner .skill-tip-list {
+      margin: 0 0 1.15rem;
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.98rem;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .skill-tip-dialog-inner .skill-tip-list li {
+      padding-left: 0.25rem;
+    }
+    .skill-tip-stems-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 0 0.85rem;
+      font-size: 0.78rem;
+      line-height: 1.28;
+      font-weight: 500;
+      table-layout: fixed;
+    }
+    .skill-tip-stems-table td {
+      border: 1px solid var(--border-subtle);
+      padding: 0.32rem 0.4rem;
+      vertical-align: top;
+      width: 25%;
+      word-wrap: break-word;
+    }
+    .skill-tip-stems-table tr:nth-child(even) td {
+      background: rgba(91, 33, 182, 0.05);
+    }
+    .btn-skill-tip-close {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.55rem 1.2rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(91, 33, 182, 0.25);
+    }
+    .btn-skill-tip-close:hover {
+      filter: brightness(1.05);
+    }
+    .btn-secondary {
+      padding: 0.6rem 1.1rem;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border-subtle);
+      background: transparent;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Key skills navigation">
+      <div class="brand">
+        <div class="brand-logo-frame">
+          <img
+            class="brand-logo-img"
+            src="assets/achieve-logo-mark.png"
+            width="200"
+            height="200"
+            alt="Achieve — A+ writing mark"
+          />
+        </div>
+      </div>
+      <div class="skill-nav-label" id="sidebarNavHeading">Choose level and skill</div>
+      <span class="sr-only" id="levelLabel">Level</span>
+      <div class="sidebar-level-wrap">
+        <div
+          class="level-options level-segmented"
+          role="radiogroup"
+          aria-labelledby="levelLabel"
+          id="levelGroup"
+        >
+          <button type="button" class="level-choice" data-level="beginner" aria-pressed="true" aria-label="Level I, years 2 to 4" title="Years 2–4">I</button>
+          <button type="button" class="level-choice" data-level="intermediate" aria-pressed="false" aria-label="Level II, years 5 to 8" title="Years 5–8">II</button>
+          <button type="button" class="level-choice" data-level="advanced" aria-pressed="false" aria-label="Level III, years 9 to 12" title="Years 9–12">III</button>
+        </div>
+      </div>
+      <ul class="skill-list" id="skillList"></ul>
+      <blockquote class="sidebar-tenet" aria-live="polite">
+        <p class="sidebar-tenet-text" id="sidebarTenetText"></p>
+      </blockquote>
+    </aside>
+
+    <main class="main">
+      <header class="main-toolbar" aria-label="View controls">
+        <div class="main-toolbar-cluster main-toolbar-cluster--primary">
+          <div class="control-group" title="Scales projector cards and the paragraph paste box (default paste size 24px at 100%)">
+            <label for="fontSlider">Display text size</label>
+            <input type="range" id="fontSlider" min="85" max="160" value="100" />
+          </div>
+        </div>
+        <div class="main-toolbar-cluster">
+          <button
+            type="button"
+            class="icon-btn"
+            id="pasteToggleBtn"
+            aria-expanded="false"
+            aria-controls="pastePanel"
+            aria-label="Show or hide paragraph checker"
+            data-tip="Paragraph checker"
+          >
+            🖋️
+          </button>
+          <div class="theme-menu-wrap" id="themeMenuWrap">
+            <button
+              type="button"
+              class="toolbar-theme-btn"
+              id="themeMenuBtn"
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-controls="themeMenuPanel"
+            >
+              LOAD THEME
+            </button>
+            <div class="theme-menu-panel" id="themeMenuPanel" hidden role="menu" aria-label="Example themes"></div>
+          </div>
+          <button
+            type="button"
+            class="icon-btn"
+            id="themeToggle"
+            aria-label="Toggle dark mode"
+            data-tip="Switch to dark mode"
+          >
+            🌙
+          </button>
+          <button type="button" class="icon-btn" id="settingsBtn" aria-label="Settings" data-tip="Settings">
+            ⚙️
+          </button>
+        </div>
+      </header>
+
+      <section class="skill-banner" aria-labelledby="skillBannerHeading">
+        <div class="skill-banner-inner">
+          <div class="skill-banner-head-row">
+            <div class="hero-badge" id="skillBannerHeading">
+              <span class="hero-badge-star" aria-hidden="true">⭐</span>
+              <span id="skillBadge">Key skill • Predictable starts</span>
+            </div>
+            <button
+              type="button"
+              class="skill-tip-trigger"
+              id="skillTipTrigger"
+              hidden
+              aria-label="Open teaching examples for this key skill"
+              title="Teaching examples — techniques to model"
+            >
+              💡
+            </button>
+          </div>
+          <p class="explanation" id="skillExplanation">
+            Rewrite sentence beginnings — avoid over-relying on pronouns and pointers so ideas land with clarity and punch.
+          </p>
+        </div>
+      </section>
+
+      <section class="paste-panel" id="pastePanel" aria-labelledby="pasteHeading" hidden>
+        <h4 id="pasteHeading">Check your own paragraph</h4>
+        <label class="sr-only" for="pasteParagraphInput">Paragraph to analyse</label>
+        <textarea
+          id="pasteParagraphInput"
+          class="paste-textarea"
+          placeholder="Type or paste text here…"
+          spellcheck="true"
+        ></textarea>
+        <div class="paste-actions">
+          <button type="button" class="btn-primary" id="pasteAnalyzeBtn">Highlight targets</button>
+          <span class="paste-skill-note" id="pasteSkillNote" hidden>
+            This key skill does not use automatic highlighting. Choose another skill in the menu to run the checker.
+          </span>
+        </div>
+        <div class="paste-output" id="pasteOutputArea" aria-live="polite">
+          <article class="sentence-card paste-result-card" id="pasteResultCard" hidden>
+            <p id="pasteResultParagraph"></p>
+          </article>
+        </div>
+      </section>
+
+      <div class="exercise-region" id="exerciseRegion">
+        <div class="exercise-stack" id="exerciseStack">
+          <div class="sentence-grid" id="sentenceGrid" aria-live="polite"></div>
+          <div class="teacher-example-footer">
+            <button
+              type="button"
+              class="teacher-example-add"
+              id="teacherExampleAdd"
+              aria-expanded="false"
+              aria-controls="teacherExamplePanel"
+              aria-label="Add your own example for the class"
+              title="Add your own example for the class"
+            >
+              <span aria-hidden="true">+</span>
+            </button>
+            <div class="teacher-example-panel" id="teacherExamplePanel" hidden>
+              <label class="sr-only" for="teacherExampleInput">Your own example</label>
+              <textarea
+                id="teacherExampleInput"
+                class="teacher-example-input"
+                placeholder="Write your own example for the class…"
+                spellcheck="true"
+                rows="4"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="settings" id="settingsDialog">
+    <div class="settings-inner">
+      <h4>Settings</h4>
+    </div>
+  </dialog>
+
+  <dialog class="skill-tip-dialog" id="skillTipDialog" aria-labelledby="skillTipDialogTitle">
+    <div class="skill-tip-dialog-inner">
+      <h4 id="skillTipDialogTitle">Examples</h4>
+      <p class="skill-tip-intro" id="skillTipIntro"></p>
+      <div id="skillTipContent"></div>
+      <button type="button" class="btn-skill-tip-close" id="skillTipClose">Close</button>
+    </div>
+  </dialog>
+
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+
+  <script src="examples.js"></script>
+  <script src="themes/the-market.js"></script>
+  <script src="themes/ancient-lands.js"></script>
+  <script src="themes/the-pirate-lord.js"></script>
+  <script src="themes/the-monsters-lair.js"></script>
+  <script src="themes/the-deep.js"></script>
+  <script src="themes/stranded.js"></script>
+  <script>
+    const KEY_SKILLS = [
+      { id: "predictable-starts", title: "Predictable starts", coreFix: "Rewrite sentence beginnings — avoid over-using The It A An He She His Her This They Then There at the start of a sentence." },
+      { id: "weak-be", title: 'Passive to-be verbs', coreFix: "Auxiliary verbs like was were is are has had have be been being and the n't variations can weaken expression." },
+      { id: "basic-verbs", title: "Basic verb use", coreFix: "Choose precise, vivid verbs — one strong verb beats a pile of ordinary ones." },
+      { id: "repetition", title: "Noun / verb repetition", coreFix: "Repeating key nouns or verbs in a sentence or adjacent sentences is lazy - use synonyms or restructure sentences." },
+      { id: "weak-adjectives", title: "Weak adjectives", coreFix: "Push beyond colour and size — build doubles and triples that sharpen the image." },
+      { id: "adverbs", title: "Adverb use", coreFix: "Let a stronger verb do the work — often the adverb becomes unnecessary noise." },
+      { id: "stop-words", title: "Stop word overload", coreFix: "Tighten filler and function words — aim toward efficient, confident prose over time (target ≈ 28% by Year 12)." },
+      { id: "filter-words", title: "Filter words", coreFix: "Write through the character, not about them — cut filters that dull immediacy." },
+      { id: "sentence-structure", title: "Simple sentence construction", coreFix: "Apply complex sentence constructions to vary rhythm, tone and meaning." },
+      { id: "literary-devices", title: "Literary devices", coreFix: "Deploy the full device library with precision — name the effect you want, then choose the tool." },
+      { id: "paragraph-cohesion", title: "Weak paragraph cohesion", coreFix: "One clear purpose per paragraph — weave connectives so ideas stick together." },
+      { id: "narrative-types", title: "Narrative sentence types", coreFix: "Mix Action Thinking Feeling Description Atmosphere Story and Dialogue sentences to match the stage of the story." },
+      { id: "author-stems", title: "Author stems", coreFix: "Use deliberate starts to unlock new thinking — stems break autopilot drafting." },
+      { id: "information-adders", title: "Information adders", coreFix: "Extend basic sentences by replacing the full stop with: with which since because while who where when until although or 'ing' verbs." },
+    ];
+
+    const KEY_SKILL_IDS = KEY_SKILLS.map((s) => s.id);
+    globalThis.ACHIEVE_THEME_BANKS = globalThis.ACHIEVE_THEME_BANKS || {};
+
+    /** Skills 9–14: no automatic ** highlighting (examples, paste combined scan, demo). */
+    const SKILLS_PLAIN_CARDS = new Set([
+      "sentence-structure",
+      "literary-devices",
+      "paragraph-cohesion",
+      "narrative-types",
+      "author-stems",
+      "information-adders",
+    ]);
+
+    /** Key skills 1–14: lightbulb examples (author-stems uses a 4×10 stem table). */
+    const SKILL_TECHNIQUE_TIP_IDS = new Set([
+      "predictable-starts",
+      "weak-be",
+      "basic-verbs",
+      "repetition",
+      "weak-adjectives",
+      "adverbs",
+      "stop-words",
+      "filter-words",
+      "sentence-structure",
+      "literary-devices",
+      "paragraph-cohesion",
+      "narrative-types",
+      "author-stems",
+      "information-adders",
+    ]);
+
+    /** Author stems — four columns × ten rows (see SKILL_TECHNIQUE_EXAMPLES for other skills). */
+    const SKILL_TECHNIQUE_AUTHOR_STEMS = [
+      [
+        "Boldly, she",
+        "Breathing heavily,",
+        "Glancing furtively,",
+        "Nothing seemed more real than",
+        "With a crushed heart,",
+        "Heavy footsteps echoed",
+        "Enjoying the silence, she",
+        "There was something strange",
+        "Disappearing once more into",
+        "After finally coming back,",
+      ],
+      [
+        "Since that moment,",
+        "Opening her eyes, she",
+        "Calmly, she",
+        "With scarcely a word,",
+        "Even though he knew",
+        "For a dreadful moment,",
+        "Although he put",
+        "Because of that one decision,",
+        "Forcefully, he was ordered to",
+        "With little resistance,",
+      ],
+      [
+        "It was different because",
+        "Ashamed, he turned and",
+        "With a suppressed smile,",
+        "With a whisper, she",
+        "Admiring the sight, we",
+        "She hesitated, then",
+        "With quivering hands,",
+        "Watching her face, he",
+        "The expectation was",
+        "After a questioning gaze,",
+      ],
+      [
+        "Beyond ordinary, it",
+        "It was appreciated when",
+        "It struck her that",
+        "Upon further inspection,",
+        "His undoing was",
+        "Glancing over his shoulder,",
+        "Of all the sadness",
+        "The remark deserved",
+        "The only reason",
+        "Walking ponderously, he",
+      ],
+    ];
+
+    /** Teaching-example sentences per skill id — each string is one bullet in the lightbulb popup. */
+    const SKILL_TECHNIQUE_EXAMPLES = {
+      "predictable-starts": [
+        "Replacing predictable starts — upgrades avoid opening with The / It / A / She / This (and similar) at the start.",
+        "The dog barked loudly in the yard. → From the yard, a dog barked loudly.",
+        "She walked into the room slowly. → With slow, careful steps, she entered the room.",
+        "It was a cold morning. → On a bitterly cold morning, frost clung to the grass.",
+        "This made him feel nervous. → Because of this, his nerves tightened.",
+        "A man stood at the door. → At the doorway, a man stood waiting.",
+      ],
+      "weak-be": [
+        "Replacing was / were / had / didn't — stronger, more concrete phrasing.",
+        "The room was dark. → Beyond the doorway, darkness swallowed the room.",
+        "They were angry about the result. → After the result, anger spread through the group.",
+        "He had a feeling something was wrong. → Without warning, a sense of unease crept over him.",
+        "She didn't notice the sound. → Amid the noise, the sound went unnoticed.",
+        "The place was being watched. → From across the street, someone watched the place.",
+      ],
+      "basic-verbs": [
+        "Replacing basic verbs (went, got, made, saw, said) — sharper choices.",
+        "He went to the door. → Without hesitation, he moved toward the door.",
+        "She got a message. → Midway through the lesson, a message appeared on her phone.",
+        "He made a mistake. → In a split second, he slipped up.",
+        "She saw the figure. → Across the road, a figure emerged from the shadows.",
+        "He said \"leave.\" → Under his breath, he muttered, \"Leave.\"",
+      ],
+      "repetition": [
+        "Avoiding repeating key nouns / verbs — combine or vary within the sentence.",
+        "The car stopped. The car made a loud noise. → At the lights, the car stopped, its engine rattling loudly.",
+        "He ran down the street. He ran past the shops. → Down the street, he ran, racing past the shops.",
+        "The teacher spoke. The teacher looked angry. → At the front of the room, the teacher spoke, her expression tightening.",
+        "The storm came closer. The storm was loud. → Overhead, the storm closed in, thunder cracking loudly.",
+        "The dog barked. The dog chased the ball. → Across the yard, the dog barked, then chased the ball.",
+      ],
+      "weak-adjectives": [
+        "Replacing weak adjectives — more specific, vivid wording.",
+        "A big house stood there. → On the hill, a towering house stood.",
+        "It was a small room. → Inside, the room felt cramped and narrow.",
+        "She had a nice voice. → When she spoke, a clear, steady voice carried across the room.",
+        "It was a good result. → By the end, a strong result was achieved.",
+        "It was a bad decision. → In that moment, a costly decision was made.",
+      ],
+      "adverbs": [
+        "Avoiding adverbs — let stronger verbs or detail do the work.",
+        "He ran quickly down the track. → Down the track, he sprinted.",
+        "She spoke very softly. → Leaning closer, she whispered.",
+        "He walked slowly to the door. → Toward the door, he dragged his feet.",
+        "It was really loud. → Across the room, the noise became deafening.",
+        "She looked very angry. → In an instant, her expression hardened.",
+      ],
+      "stop-words": [
+        "Stop words / filler — tighter, more direct sentences.",
+        "He walked to the door and then opened it. → Reaching the door, he opened it.",
+        "There was a noise in the room. → From the corner, a noise echoed.",
+        "He picked up the bag and the book and the keys. → From the table, he grabbed the bag, book, and keys.",
+        "Then he ran outside. → Without thinking, he ran outside.",
+        "There were people everywhere. → All around him, people crowded the space.",
+      ],
+      "filter-words": [
+        "Filter words — show the moment directly instead of through saw / felt / noticed / heard / realised.",
+        "He saw a shadow move. → Along the wall, a shadow shifted.",
+        "She felt the ground shake. → Beneath her feet, the ground shook.",
+        "He noticed the door was open. → Ahead of him, the door stood open.",
+        "She heard footsteps behind her. → Behind her, footsteps echoed.",
+        "He realised he was alone. → In the silence, he stood alone.",
+      ],
+      "sentence-structure": [
+        "Quadruple verb — STANDING by the colourful circus tent, Cameron CHECKED the time, STUDIED the thickening crowd, AND RAISED her hand hoping to catch the attention of a distant face she hadn't seen in many years.",
+        "Advanced triple descriptor — With her uniform stained, pride shattered, and fists clenched, Cassidy stormed off the field.",
+        "Advanced triple descriptor — Mr Grayson believed he could handle any trip, but the school bus - with its torn vinyl seats, musty smell, and never-ending student chatter - depressed him.",
+        "A + she/he/it — A dedicated teacher, and patient mentor, she inspired her students to reach their full potential.",
+        "A + she/he/it — A vibrant city, and a place where tourists flock annually, Brisbane receives worldwide praise for its high standard of living.",
+        "Em-dash descriptor — As she gazed at the painting, all colours—the soft hues of the sky, the vivid tones of the flowers—seemed to blend together.",
+        "Many / most — Many tourists visited the ancient ruins, though most were content to admire the pictures in their guidebooks.",
+        "Many / most — Many people take good care of their physical shape, however most tend to ignore their mental health.",
+        "With double hand — With the basket of fresh fruits he grabbed from the farmer's market in one hand, and his bicycle helmet in the other, Thomas rode back home through the busy streets.",
+        "Nested who — The old man, who spent his days by the river where he had once found a rare gem, smiled at memories only he knew.",
+        "Triple where — Over the hills, under the stars, and through the whispering winds came a lone wolf, silent and swift.",
+        "Triple when — Following the speech, prior to the applause, amidst a wave of uncertainty, he made his decision.",
+        "Dual perspective — From above, the city sparkled like a jewel; from below, it throbbed with the ceaseless energy of survival.",
+      ],
+      "literary-devices": [
+        "Simile — The playground was as loud as a zoo at lunchtime.",
+        "Metaphor — The sun was a giant spotlight in the sky.",
+        "Alliteration — The slippery snake slithered silently.",
+        "Onomatopoeia — The door slammed with a loud BANG!",
+        "Anaphora — I remember the noise. I remember the fear. I remember running.",
+        "Asyndeton — The room was dark, cold, silent, empty.",
+        "Polysyndeton — The wind howled and pushed and tore at the trees.",
+        "Juxtaposition — The party was loud, but she stood alone in the corner.",
+        "Irony (situational) — He trained for years, only to trip at the finish line.",
+      ],
+      "paragraph-cohesion": [
+        "NARRATIVE — 5 cohesion pathways",
+        "1. Action flow — Enter → Notice → React → Move → Shift (character enters → observes → responds → continues → something changes).",
+        "2. Zoom-in focus — Wide setting → Specific detail → Key object → Meaning → Tension (street → house → door → significance → unease).",
+        "3. Emotion build — Calm → Uneasy → Tense → Overwhelmed → Breaking point.",
+        "4. Cause & effect — Action → Consequence → Reaction → Decision → Outcome.",
+        "5. Time sequence — Before → During → After → Reflection → Change.",
+        "PERSUASIVE — 5 cohesion pathways",
+        "1. Claim expansion — Claim → Explain → Example → Impact → Link back.",
+        "2. Problem → Solution — Problem → Cause → Effect → Solution → Benefit.",
+        "3. Scale up — Personal → Local → National → Global → Urgency.",
+        "4. Counterargument flow — Claim → Opposing view → Rebuttal → Evidence → Stronger claim.",
+        "5. Logic chain — Point → Reason → Proof → Interpretation → Conclusion.",
+        "ANALYTICAL — 5 cohesion pathways",
+        "1. Technique → effect — Technique → Example → Effect → Meaning → Link to argument.",
+        "2. Zoom-in analysis — Statement → Evidence → Word-level focus → Effect → Interpretation.",
+        "3. Layered meaning — Surface meaning → Implied meaning → Deeper idea → Author intent → Reader impact.",
+        "4. Compare & contrast — Text A → Text B → Similarity → Difference → Insight.",
+        "5. Argument build — Point → Evidence → Analysis → Evaluation → Link forward.",
+      ],
+      "narrative-types": [
+        "ACTION — Without hesitating, he snatched the keys and bolted through the door.",
+        "THINKING — Knowing it could fall apart at any moment, he questioned whether any of this had been worth it.",
+        "FEELING — Despite the noise around him, a quiet dread settled deep in his chest.",
+        "DESCRIPTION — Beneath the flickering light, the cracked walls revealed layers of peeling paint and years of neglect.",
+        "ATMOSPHERE — Around him, the wind pressed against the windows, carrying a low, restless hum through the room.",
+        "STORY — Years before this moment, mistakes like this had cost people far more than pride.",
+        "DIALOGUE — Leaning closer, he remarked, “You knew this would happen.”",
+      ],
+      "information-adders": [
+        "Information adders — extend the sentence after the main clause with with / which / since / because / while / who / where / when / until / although or an -ing phrase.",
+        "With — At the doorway, he reached for the handle, with his hands shaking.",
+        "Which — Under the flickering light, he made a choice which changed everything.",
+        "Since — In the silence, he stayed quiet since the truth would only make things worse.",
+        "Because — Near the back fence, she stayed behind because someone had to help.",
+        "While — Across the room, he forced his voice to stay calm while the others panicked.",
+        "Who — At the gate, a tired man who had waited for hours watched in silence.",
+        "Where — At the edge of town, they stopped beside a house where the windows stared back.",
+        "When — Without warning, his whole body froze when the door slammed shut.",
+        "Until — Driven by fear, he kept running until his legs buckled.",
+        "Although — On the final stretch, he kept going although exhaustion dragged at every step.",
+        "ING verb — Across the threshold, he stepped carefully, checking the corners before moving further.",
+      ],
+    };
+
+    const LEVEL_LABELS = {
+      beginner: "I (Yrs 2–4)",
+      intermediate: "II (Yrs 5–8)",
+      advanced: "III (Yrs 9–12)",
+    };
+
+    /** Ordered theme picker entries; extend via registerThemeMenuEntry(id, label) plus registerExampleTheme. */
+    const THEME_MENU = [
+      { id: "default", label: "Default Pack" },
+      { id: "the-market", label: "The Market" },
+      { id: "ancient-lands", label: "Ancient Lands" },
+      { id: "the-pirate-lord", label: "The Pirate Lord" },
+      { id: "the-monsters-lair", label: "The Monster's Lair" },
+      { id: "the-deep", label: "The Deep" },
+      { id: "stranded", label: "Stranded" },
+    ];
+
+    const STORAGE = {
+      theme: "achieve_theme",
+      font: "achieve_font_scale",
+      level: "achieve_level",
+      themePackTitle: "achieve_theme_pack_title",
+      themeMenuId: "achieve_example_theme_menu",
+    };
+
+    let selectedId = KEY_SKILLS[0].id;
+    let selectedLevel = "beginner";
+
+    /** Combined paste scan: plain text, merged segments {start,end,skills:Set}, hits & optional solo filter */
+    let pasteCombinedPlain = null;
+    let pasteCombinedSegments = null;
+    let pasteSkillHits = new Set();
+    let pasteFilterSkillId = null;
+
+    const STUDIO_TENETS = [
+      "Students write what they think, not think about what they write.",
+      "Great writing comes only from great thinking.",
+      "These skills produce friction for the writer's brain, and growth occurs!",
+    ];
+    let studioTenetIndex = 0;
+
+    function renderSidebarTenet() {
+      const el = document.getElementById("sidebarTenetText");
+      if (!el) return;
+      const t = STUDIO_TENETS[studioTenetIndex % STUDIO_TENETS.length];
+      el.textContent = "\u201C" + t + "\u201D";
+    }
+
+    function advanceStudioTenet() {
+      studioTenetIndex = (studioTenetIndex + 1) % STUDIO_TENETS.length;
+      renderSidebarTenet();
+    }
+
+    const skillListEl = document.getElementById("skillList");
+    const skillBadge = document.getElementById("skillBadge");
+    const skillExplanation = document.getElementById("skillExplanation");
+    const levelGroup = document.getElementById("levelGroup");
+    const exerciseRegion = document.getElementById("exerciseRegion");
+    const sentenceGrid = document.getElementById("sentenceGrid");
+    const teacherExampleAdd = document.getElementById("teacherExampleAdd");
+    const teacherExamplePanel = document.getElementById("teacherExamplePanel");
+    const teacherExampleInput = document.getElementById("teacherExampleInput");
+    const pastePanel = document.getElementById("pastePanel");
+    const pasteToggleBtn = document.getElementById("pasteToggleBtn");
+    const pasteParagraphInput = document.getElementById("pasteParagraphInput");
+    const pasteAnalyzeBtn = document.getElementById("pasteAnalyzeBtn");
+    const pasteSkillNote = document.getElementById("pasteSkillNote");
+    const pasteResultCard = document.getElementById("pasteResultCard");
+    const pasteResultParagraph = document.getElementById("pasteResultParagraph");
+    const fontSlider = document.getElementById("fontSlider");
+    const themeToggle = document.getElementById("themeToggle");
+    const settingsBtn = document.getElementById("settingsBtn");
+    const settingsDialog = document.getElementById("settingsDialog");
+    const themeMenuWrap = document.getElementById("themeMenuWrap");
+    const themeMenuBtn = document.getElementById("themeMenuBtn");
+    const themeMenuPanel = document.getElementById("themeMenuPanel");
+    const skillTipTrigger = document.getElementById("skillTipTrigger");
+    const skillTipDialog = document.getElementById("skillTipDialog");
+    const skillTipDialogTitle = document.getElementById("skillTipDialogTitle");
+    const skillTipIntro = document.getElementById("skillTipIntro");
+    const skillTipContent = document.getElementById("skillTipContent");
+    const skillTipClose = document.getElementById("skillTipClose");
+
+    function skillById(id) {
+      return KEY_SKILLS.find((s) => s.id === id) || KEY_SKILLS[0];
+    }
+
+    function renderNav() {
+      skillListEl.innerHTML = "";
+      KEY_SKILLS.forEach((s, i) => {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "skill-btn";
+        btn.setAttribute("data-skill-id", s.id);
+        btn.setAttribute("aria-current", s.id === selectedId ? "true" : "false");
+        btn.innerHTML = `<span class="skill-num">${i + 1}</span><span>${escapeHtml(s.title)}</span>`;
+        btn.addEventListener("click", () => {
+          selectSkill(s.id);
+          advanceStudioTenet();
+        });
+        li.appendChild(btn);
+        skillListEl.appendChild(li);
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function escapeRegExp(s) {
+      return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function splitIntoSentences(text) {
+      return text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+    }
+
+    /** Wrap regex matches in ** only in plain text (not inside existing **…** spans). */
+    function wrapAllMatches(text, regex) {
+      const flags = regex.flags.includes("g") ? regex.flags : regex.flags + "g";
+      const r = new RegExp(regex.source, flags);
+      return text.split(/(\*\*[^*]*\*\*)/g).map((part, i) => {
+        if (i % 2 === 1) return part;
+        let out = "";
+        let last = 0;
+        let m;
+        const s = part;
+        r.lastIndex = 0;
+        while ((m = r.exec(s)) !== null) {
+          out += s.slice(last, m.index);
+          out += "**" + m[0] + "**";
+          last = m.index + m[0].length;
+        }
+        out += s.slice(last);
+        return out;
+      }).join("");
+    }
+
+    /** Wrap phrases longest-first; never nests highlights inside an existing **…** span. */
+    function wrapPhraseList(text, phrases) {
+      const sorted = [...phrases].sort((a, b) => b.length - a.length);
+      return text.split(/(\*\*[^*]*\*\*)/g).map((part, i) => {
+        if (i % 2 === 1) return part;
+        let s = part;
+        sorted.forEach((p) => {
+          const re = new RegExp(escapeRegExp(p), "gi");
+          s = s.replace(re, (m, offset, str) => {
+            const before = str.slice(0, offset);
+            if (((before.match(/\*\*/g) || []).length % 2) === 1) return m;
+            return "**" + m + "**";
+          });
+        });
+        return s;
+      }).join("");
+    }
+
+    /** Whole-word matches only; skips regions already wrapped in **…**. */
+    function wrapWordBoundaryList(text, words) {
+      const uniq = [...new Set(words.map((w) => String(w).toLowerCase()))].sort((a, b) => b.length - a.length);
+      const alt = uniq.map(escapeRegExp).join("|");
+      if (!alt) return text;
+      const re = new RegExp("\\b(?:" + alt + ")\\b", "gi");
+      return text.split(/(\*\*[^*]*\*\*)/g).map((part, i) => {
+        if (i % 2 === 1) return part;
+        let s = part;
+        s = s.replace(re, (m, offset, str) => {
+          const before = str.slice(0, offset);
+          if (((before.match(/\*\*/g) || []).length % 2) === 1) return m;
+          return "**" + m + "**";
+        });
+        return s;
+      }).join("");
+    }
+
+    const PREDICTABLE_PREFIXES = [
+      "Without warning and without the grace of any final word, ",
+      "Somewhere between the version of events she told others and the truth she kept to herself ",
+      "Somewhere between panic and a strange, unwanted calm, ",
+      "What she had built, painstakingly and alone, across the length of a decade, ",
+      "What nobody in that room was willing to say aloud ",
+      "What the evidence could not account for ",
+      "Long before the decision was made official, ",
+      "Deep inside, beneath the performance of composure, ",
+      "What she had not prepared for was the way ",
+      "What nobody had expected was the moment when ",
+      "Without warning, the silence broke and ",
+      "Without warning, the ",
+      "Long before the others noticed, ",
+      "Behind her, the sound of footsteps meant that ",
+      "With hands that would not stop shaking, ",
+      "With hands she could not keep still, ",
+      "In the space of a single second, ",
+      "In the years that followed, ",
+      "Somewhere between fear and fury, ",
+      "Deep inside, she ",
+      "All of a sudden, ",
+      "From behind the door, ",
+      "Before she could stop herself, ",
+      "At the top of the hill, ",
+      "Deep in the forest, ",
+      "Just as he reached for it, ",
+      "For a moment, everything ",
+      "Out of nowhere, ",
+      "Right at that second, ",
+      "For a moment, ",
+    ];
+
+    function annotatePredictableFragment(t) {
+      const s = t.trim();
+      if (!s) return t;
+      for (const pre of PREDICTABLE_PREFIXES) {
+        if (s.startsWith(pre)) {
+          return "**" + pre.trimEnd() + "**" + s.slice(pre.length);
+        }
+      }
+      const theM = s.match(/^(The\s+\S+)/i);
+      if (theM) return "**" + theM[1] + "**" + s.slice(theM[1].length);
+      const pro = s.match(/^(He|She|It|They|We|You|I)\b/i);
+      if (pro) return "**" + pro[1] + "**" + s.slice(pro[1].length);
+      return s;
+    }
+
+    function annotatePredictableStarts(text) {
+      return splitIntoSentences(text).map(annotatePredictableFragment).join(" ");
+    }
+
+    /** Repeated content words only: tokens not in the stop-word lexicon, counted ≥2 → red. */
+    function annotateRepetition(text) {
+      const words = text.match(/\b[a-zA-Z]+\b/g) || [];
+      const counts = {};
+      words.forEach((w) => {
+        const k = w.toLowerCase();
+        if (STOP_WORD_SINGLE_SET.has(k)) return;
+        counts[k] = (counts[k] || 0) + 1;
+      });
+      const reps = Object.keys(counts)
+        .filter((k) => counts[k] >= 2)
+        .sort((a, b) => b.length - a.length);
+      if (!reps.length) return text;
+      const alt = reps.map(escapeRegExp).join("|");
+      return wrapAllMatches(text, new RegExp("\\b(?:" + alt + ")\\b", "gi"));
+    }
+
+    function annotateWeakAdjectives(text) {
+      const phrases = [
+        "big, old",
+        "dark and cold",
+        "calm, quiet manner",
+        "tall, thin man",
+        "dark and scary night",
+        "long and boring journey",
+        "big moment",
+        "good day",
+        "strange feeling",
+        "cold night",
+        "hard decision",
+        "short note",
+        "small office",
+      ];
+      const words = [
+        "big",
+        "nice",
+        "old",
+        "small",
+        "good",
+        "pretty",
+        "dark",
+        "tall",
+        "little",
+        "cute",
+        "scary",
+        "long",
+        "boring",
+        "cold",
+        "strange",
+        "empty",
+        "hard",
+        "thin",
+        "short",
+        "calm",
+        "quiet",
+        "heavy",
+        "difficult",
+        "emotional",
+        "meaningful",
+        "harsh",
+        "powerful",
+        "busy",
+        "tense",
+        "conflicted",
+        "bleak",
+        "unwelcoming",
+        "red",
+      ];
+      const alt = [...phrases.map(escapeRegExp), ...words.map((w) => "\\b" + escapeRegExp(w) + "\\b")]
+        .sort((a, b) => b.length - a.length)
+        .join("|");
+      return wrapAllMatches(text, new RegExp("(" + alt + ")", "gi"));
+    }
+
+    function annotateAdverbs(text) {
+      const skip = new Set(["family", "early", "only", "ugly", "supply", "July"]);
+      return text.split(/(\*\*[^*]*\*\*)/g).map((part, i) => {
+        if (i % 2 === 1) return part;
+        return part.replace(/\b(\w+ly|very|really|absolutely|quite|too)\b/gi, (m) => {
+          if (/ly$/i.test(m) && skip.has(m.toLowerCase())) return m;
+          return "**" + m + "**";
+        });
+      }).join("");
+    }
+
+    /* Same lexicon as stop-word skill — repetition marks repeated tokens that are NOT these. */
+    const STOP_WORD_SINGLE_LIST = [
+        "a",
+        "about",
+        "above",
+        "accordingly",
+        "across",
+        "actually",
+        "after",
+        "against",
+        "again",
+        "all",
+        "along",
+        "also",
+        "already",
+        "although",
+        "always",
+        "am",
+        "amid",
+        "among",
+        "an",
+        "and",
+        "any",
+        "are",
+        "around",
+        "as",
+        "at",
+        "back",
+        "basically",
+        "be",
+        "because",
+        "been",
+        "being",
+        "before",
+        "behind",
+        "below",
+        "beside",
+        "beyond",
+        "between",
+        "both",
+        "but",
+        "by",
+        "can",
+        "certainly",
+        "clearly",
+        "consequently",
+        "could",
+        "dare",
+        "definitely",
+        "did",
+        "do",
+        "does",
+        "down",
+        "during",
+        "each",
+        "even",
+        "every",
+        "fairly",
+        "few",
+        "for",
+        "from",
+        "further",
+        "furthermore",
+        "generally",
+        "get",
+        "got",
+        "gotten",
+        "had",
+        "has",
+        "have",
+        "he",
+        "her",
+        "hers",
+        "herself",
+        "hence",
+        "here",
+        "him",
+        "himself",
+        "his",
+        "however",
+        "i",
+        "if",
+        "in",
+        "instead",
+        "into",
+        "is",
+        "it",
+        "its",
+        "itself",
+        "just",
+        "like",
+        "literally",
+        "may",
+        "maybe",
+        "me",
+        "meanwhile",
+        "might",
+        "more",
+        "moreover",
+        "most",
+        "must",
+        "my",
+        "myself",
+        "near",
+        "need",
+        "never",
+        "nevertheless",
+        "nonetheless",
+        "no",
+        "nor",
+        "normally",
+        "not",
+        "now",
+        "obviously",
+        "off",
+        "often",
+        "on",
+        "once",
+        "only",
+        "or",
+        "ought",
+        "our",
+        "ours",
+        "ourselves",
+        "out",
+        "over",
+        "own",
+        "per",
+        "perhaps",
+        "plus",
+        "possibly",
+        "pretty",
+        "probably",
+        "quite",
+        "rather",
+        "really",
+        "same",
+        "shall",
+        "she",
+        "should",
+        "since",
+        "simply",
+        "so",
+        "some",
+        "sometimes",
+        "somewhat",
+        "still",
+        "such",
+        "than",
+        "that",
+        "the",
+        "their",
+        "theirs",
+        "them",
+        "themselves",
+        "then",
+        "there",
+        "these",
+        "they",
+        "this",
+        "those",
+        "though",
+        "through",
+        "thus",
+        "therefore",
+        "to",
+        "too",
+        "toward",
+        "truly",
+        "typically",
+        "under",
+        "unless",
+        "until",
+        "up",
+        "upon",
+        "used",
+        "usually",
+        "very",
+        "via",
+        "was",
+        "we",
+        "well",
+        "were",
+        "what",
+        "which",
+        "while",
+        "who",
+        "whom",
+        "whose",
+        "whether",
+        "whereas",
+        "will",
+        "with",
+        "within",
+        "without",
+        "would",
+        "yet",
+        "you",
+        "your",
+        "yours",
+        "yourself",
+        "yourselves",
+    ];
+    const STOP_WORD_SINGLE_SET = new Set(STOP_WORD_SINGLE_LIST);
+
+    function annotateStopWords(text) {
+      const fillerPhrases = [
+        "with regard to",
+        "in the case of",
+        "on the other hand",
+        "in other words",
+        "at the same time",
+        "in terms of",
+        "as well as",
+        "in order to",
+        "for example",
+        "for instance",
+        "in addition",
+        "as a result",
+        "in spite of",
+        "in place of",
+        "as long as",
+        "based on",
+        "rather than",
+        "more than",
+        "such as",
+        "so that",
+        "due to",
+        "out of",
+        "up to",
+        "as if",
+        "as though",
+        "at least",
+        "in fact",
+        "in general",
+        "of course",
+        "as well",
+      ];
+      let t = wrapPhraseList(text, fillerPhrases);
+      t = wrapWordBoundaryList(t, STOP_WORD_SINGLE_LIST);
+      return t;
+    }
+
+    function annotateFilterWords(text) {
+      return wrapAllMatches(
+        text,
+        /\b(?:felt|saw|heard|noticed|realised|realized|seemed|appeared|watched|thought|knew|wondered|believed|decided|recognized|recognised|observed|understood|remembered|imagined|supposed|guessed|hoped|feared|wished|perceived|sensed)\b/gi
+      );
+    }
+
+    function stripHighlightMarkers(raw) {
+      return String(raw).replace(/\*\*/g, "");
+    }
+
+    function annotateSentence(skillId, plain) {
+      const text = String(plain || "");
+      if (SKILLS_PLAIN_CARDS.has(skillId)) return text;
+      switch (skillId) {
+        case "predictable-starts":
+          return annotatePredictableStarts(text);
+        case "weak-be":
+          return wrapAllMatches(text, /\b(was|were|is|are|am)\b/gi);
+        case "basic-verbs":
+          return wrapAllMatches(
+            text,
+            /\b(walks|walked|walk|looks|looked|look|goes|went|go|gets|got|get|says|said|say|makes|made|make|runs|ran|run|came|come|took|take|saw|see|thought|think)\b/gi
+          );
+        case "repetition":
+          return annotateRepetition(text);
+        case "weak-adjectives":
+          return annotateWeakAdjectives(text);
+        case "adverbs":
+          return annotateAdverbs(text);
+        case "stop-words":
+          return annotateStopWords(text);
+        case "filter-words":
+          return annotateFilterWords(text);
+        default:
+          return text;
+      }
+    }
+
+    function getExampleBank() {
+      return globalThis.ACTIVE_EXAMPLE_BANK ?? globalThis.SKILL_EXAMPLE_BANK;
+    }
+
+    function validateExampleBankShape(bank) {
+      if (!bank || typeof bank !== "object") return { ok: false, error: "Bank must be an object." };
+      for (const id of KEY_SKILL_IDS) {
+        const entry = bank[id];
+        if (!entry || typeof entry !== "object") return { ok: false, error: 'Missing skill "' + id + '".' };
+        for (const lvl of ["beginner", "intermediate", "advanced"]) {
+          const arr = entry[lvl];
+          if (!Array.isArray(arr) || arr.length === 0) {
+            return { ok: false, error: 'Skill "' + id + '" needs a non-empty "' + lvl + '" array.' };
+          }
+          for (let i = 0; i < arr.length; i++) {
+            if (typeof arr[i] !== "string") {
+              return { ok: false, error: 'Skill "' + id + '" ' + lvl + " entries must be strings." };
+            }
+          }
+        }
+      }
+      return { ok: true };
+    }
+
+    function ensureShippedThemeBanks() {
+      const fallback = globalThis.ACHIEVE_DEFAULT_EXAMPLE_BANK || globalThis.SKILL_EXAMPLE_BANK;
+      THEME_MENU.forEach((t) => {
+        if (t.id === "default") return;
+        if (!globalThis.ACHIEVE_THEME_BANKS[t.id]) {
+          globalThis.ACHIEVE_THEME_BANKS[t.id] = { title: t.label, bank: fallback };
+        }
+      });
+    }
+
+    function renderThemeMenuPanel() {
+      if (!themeMenuPanel) return;
+      const cur = sessionStorage.getItem(STORAGE.themeMenuId);
+      themeMenuPanel.replaceChildren();
+      THEME_MENU.forEach((t) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.setAttribute("role", "menuitem");
+        btn.className = "theme-menu-item" + (cur === t.id ? " theme-menu-item--active" : "");
+        btn.textContent = t.label;
+        btn.addEventListener("click", () => {
+          applyThemeFromMenuId(t.id, {});
+          advanceStudioTenet();
+        });
+        themeMenuPanel.appendChild(btn);
+      });
+    }
+
+    function closeThemeMenu() {
+      if (themeMenuPanel) themeMenuPanel.hidden = true;
+      if (themeMenuBtn) themeMenuBtn.setAttribute("aria-expanded", "false");
+    }
+
+    function openThemeMenu() {
+      ensureShippedThemeBanks();
+      renderThemeMenuPanel();
+      if (themeMenuPanel) themeMenuPanel.hidden = false;
+      if (themeMenuBtn) themeMenuBtn.setAttribute("aria-expanded", "true");
+      requestAnimationFrame(() => themeMenuPanel?.querySelector(".theme-menu-item")?.focus());
+    }
+
+    function applyThemeFromMenuId(id, opts) {
+      ensureShippedThemeBanks();
+      const silent = opts && opts.silent;
+      const meta = THEME_MENU.find((t) => t.id === id);
+      if (!meta) return;
+      if (id === "default") {
+        globalThis.ACTIVE_EXAMPLE_BANK = globalThis.ACHIEVE_DEFAULT_EXAMPLE_BANK || globalThis.SKILL_EXAMPLE_BANK;
+      } else {
+        const reg = globalThis.ACHIEVE_THEME_BANKS[id];
+        if (!reg || !reg.bank) return;
+        globalThis.ACTIVE_EXAMPLE_BANK = reg.bank;
+      }
+      sessionStorage.setItem(STORAGE.themeMenuId, id);
+      sessionStorage.removeItem(STORAGE.themePackTitle);
+      loadExercisesFromBank();
+      renderThemeMenuPanel();
+      if (!silent) {
+        closeThemeMenu();
+        toast(meta.label + ".");
+      }
+    }
+
+    function initThemeMenuSelection() {
+      ensureShippedThemeBanks();
+      const id = sessionStorage.getItem(STORAGE.themeMenuId);
+      const entry = id ? globalThis.ACHIEVE_THEME_BANKS[id] : null;
+      if (!id || id === "default" || !entry || !entry.bank) {
+        sessionStorage.setItem(STORAGE.themeMenuId, "default");
+        globalThis.ACTIVE_EXAMPLE_BANK = globalThis.ACHIEVE_DEFAULT_EXAMPLE_BANK || globalThis.SKILL_EXAMPLE_BANK;
+      } else {
+        globalThis.ACTIVE_EXAMPLE_BANK = entry.bank;
+      }
+      sessionStorage.removeItem(STORAGE.themePackTitle);
+      renderThemeMenuPanel();
+    }
+
+    function registerThemeMenuEntry(id, label) {
+      if (THEME_MENU.some((t) => t.id === id)) return;
+      THEME_MENU.push({ id, label });
+      ensureShippedThemeBanks();
+      renderThemeMenuPanel();
+    }
+
+    function applyActiveExampleBank(bank, title) {
+      globalThis.ACTIVE_EXAMPLE_BANK = bank;
+      sessionStorage.removeItem(STORAGE.themeMenuId);
+      sessionStorage.setItem(STORAGE.themePackTitle, title || "Custom theme pack");
+      loadExercisesFromBank();
+      renderThemeMenuPanel();
+    }
+
+    function resetExampleBankToDefault() {
+      applyThemeFromMenuId("default", { silent: true });
+    }
+
+    function registerExampleTheme(id, title, bank) {
+      const v = validateExampleBankShape(bank);
+      if (!v.ok) throw new Error(v.error);
+      globalThis.ACHIEVE_THEME_BANKS[id] = { title: title || id, bank };
+    }
+
+    function setActiveExampleTheme(id) {
+      const entry = globalThis.ACHIEVE_THEME_BANKS[id];
+      if (!entry) return false;
+      globalThis.ACTIVE_EXAMPLE_BANK = entry.bank;
+      sessionStorage.setItem(STORAGE.themeMenuId, id);
+      sessionStorage.removeItem(STORAGE.themePackTitle);
+      loadExercisesFromBank();
+      renderThemeMenuPanel();
+      return true;
+    }
+
+    globalThis.registerExampleTheme = registerExampleTheme;
+    globalThis.setActiveExampleTheme = setActiveExampleTheme;
+    globalThis.applyActiveExampleBank = applyActiveExampleBank;
+    globalThis.resetExampleBankToDefault = resetExampleBankToDefault;
+    globalThis.registerThemeMenuEntry = registerThemeMenuEntry;
+
+    function hydratePreloadedThemeBanks() {
+      const pre = globalThis.ACHIEVE_PRELOAD_THEME_BANKS;
+      if (!pre || typeof pre !== "object") return;
+      Object.keys(pre).forEach((id) => {
+        const pack = pre[id];
+        if (!pack || !pack.bank) return;
+        try {
+          registerExampleTheme(id, pack.title || id, pack.bank);
+        } catch (err) {
+          console.warn("Achieve: preloaded theme failed:", id, err);
+        }
+      });
+    }
+
+    function getExamplePool(skillId, level) {
+      const bank = getExampleBank();
+      if (!bank || !bank[skillId]) return [];
+      const pool = bank[skillId][level];
+      return Array.isArray(pool) ? pool : [];
+    }
+
+    function pickFour(pool) {
+      const copy = [...pool];
+      const out = [];
+      while (out.length < 4 && copy.length) {
+        const i = Math.floor(Math.random() * copy.length);
+        out.push(copy.splice(i, 1)[0]);
+      }
+      return out;
+    }
+
+    function getAnnotatedExamples(skillId, level) {
+      return pickFour(getExamplePool(skillId, level)).map((plain) => annotateSentence(skillId, plain));
+    }
+
+    /** Renders raw string; **double asterisks** mark offending chunks for the class (shown in red). */
+    /** Map **chunks** in marked string back to [start,end) offsets in the same plain text. */
+    function extractOffendingIntervals(marked) {
+      const intervals = [];
+      let plainOffset = 0;
+      const re = /\*\*([^*]*)\*\*/g;
+      let last = 0;
+      let m;
+      while ((m = re.exec(marked)) !== null) {
+        plainOffset += marked.slice(last, m.index).length;
+        const inner = m[1];
+        intervals.push([plainOffset, plainOffset + inner.length]);
+        plainOffset += inner.length;
+        last = m.index + m[0].length;
+      }
+      return intervals;
+    }
+
+    function buildMergedSegments(plain, skillIntervals) {
+      const breaks = new Set([0, plain.length]);
+      skillIntervals.forEach((ints) => {
+        ints.forEach(([s, e]) => {
+          breaks.add(s);
+          breaks.add(e);
+        });
+      });
+      const sorted = [...breaks].sort((a, b) => a - b);
+      const segments = [];
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const a = sorted[i];
+        const b = sorted[i + 1];
+        if (a >= b) continue;
+        const skills = new Set();
+        skillIntervals.forEach((ints, sid) => {
+          ints.forEach(([s, e]) => {
+            if (s < b && e > a) skills.add(sid);
+          });
+        });
+        segments.push({ start: a, end: b, skills });
+      }
+      return segments;
+    }
+
+    function renderPasteCombinedOutput() {
+      if (!pasteCombinedPlain || !pasteCombinedSegments) {
+        pasteResultCard.hidden = true;
+        pasteResultParagraph.replaceChildren();
+        return;
+      }
+      pasteResultCard.hidden = false;
+      pasteResultParagraph.replaceChildren();
+      const plain = pasteCombinedPlain;
+      const filterId = pasteFilterSkillId;
+      for (const seg of pasteCombinedSegments) {
+        const chunk = plain.slice(seg.start, seg.end);
+        const hasHit = seg.skills.size > 0;
+        const showRed = hasHit && (!filterId || seg.skills.has(filterId));
+        if (!showRed) {
+          pasteResultParagraph.appendChild(document.createTextNode(chunk));
+        } else {
+          const span = document.createElement("span");
+          span.className = "offending";
+          span.dataset.skills = [...seg.skills].join(" ");
+          span.textContent = chunk;
+          pasteResultParagraph.appendChild(span);
+        }
+      }
+    }
+
+    function updatePasteSkillNavClasses() {
+      document.querySelectorAll(".skill-btn").forEach((btn) => {
+        const sid = btn.getAttribute("data-skill-id");
+        if (!sid) return;
+        const hit = pasteCombinedPlain !== null && pasteSkillHits.has(sid);
+        btn.classList.toggle("skill-paste-hit", hit);
+        btn.classList.toggle("skill-paste-filter-active", pasteFilterSkillId !== null && pasteFilterSkillId === sid);
+      });
+    }
+
+    function fillSentenceParagraph(pEl, raw) {
+      pEl.replaceChildren();
+      const re = /\*\*([^*]*)\*\*/g;
+      let last = 0;
+      let m;
+      while ((m = re.exec(raw)) !== null) {
+        if (m.index > last) {
+          pEl.appendChild(document.createTextNode(raw.slice(last, m.index)));
+        }
+        const span = document.createElement("span");
+        span.className = "offending";
+        span.textContent = m[1];
+        pEl.appendChild(span);
+        last = m.index + m[0].length;
+      }
+      if (last < raw.length) {
+        pEl.appendChild(document.createTextNode(raw.slice(last)));
+      }
+    }
+
+    function setPastePanelOpen(open) {
+      pastePanel.hidden = !open;
+      pasteToggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (exerciseRegion) exerciseRegion.hidden = open;
+      if (open) {
+        requestAnimationFrame(() => pasteParagraphInput.focus());
+      } else {
+        setLevel(selectedLevel);
+      }
+      syncPasteToggleTip();
+      advanceStudioTenet();
+    }
+
+    function syncPastePanel() {
+      pasteAnalyzeBtn.disabled = false;
+      pasteAnalyzeBtn.setAttribute("aria-disabled", "false");
+      pasteSkillNote.hidden = true;
+    }
+
+    function runPasteAnalysis() {
+      const raw = pasteParagraphInput.value.trim();
+      if (!raw) {
+        toast("Paste some text first.", true);
+        pasteParagraphInput.focus();
+        return;
+      }
+      pasteFilterSkillId = null;
+      pasteCombinedPlain = raw;
+      const skillIntervals = new Map();
+      KEY_SKILLS.forEach((sk) => {
+        if (SKILLS_PLAIN_CARDS.has(sk.id)) return;
+        const marked = annotateSentence(sk.id, raw);
+        const ints = extractOffendingIntervals(marked);
+        if (ints.length) skillIntervals.set(sk.id, ints);
+      });
+      pasteCombinedSegments = buildMergedSegments(raw, skillIntervals);
+      pasteSkillHits = new Set();
+      pasteCombinedSegments.forEach((seg) => {
+        seg.skills.forEach((sid) => pasteSkillHits.add(sid));
+      });
+      renderPasteCombinedOutput();
+      updatePasteSkillNavClasses();
+      const n = pasteSkillHits.size;
+      advanceStudioTenet();
+      toast(n ? "Scanned — " + n + " key skill" + (n === 1 ? "" : "s") + " matched. Click one to solo; click again for all." : "Scanned — no automatic markers matched.");
+    }
+
+    function selectSkill(id) {
+      if (pasteCombinedPlain !== null) {
+        if (pasteSkillHits.has(id)) {
+          pasteFilterSkillId = pasteFilterSkillId === id ? null : id;
+        } else {
+          pasteFilterSkillId = null;
+        }
+      }
+      selectedId = id;
+      document.querySelectorAll(".skill-btn").forEach((b) => {
+        b.setAttribute("aria-current", b.getAttribute("data-skill-id") === id ? "true" : "false");
+      });
+      const s = skillById(id);
+      skillBadge.textContent = "Key skill • " + s.title;
+      skillExplanation.textContent = s.coreFix;
+      syncPastePanel();
+      renderPasteCombinedOutput();
+      updatePasteSkillNavClasses();
+      setLevel(selectedLevel);
+      loadExercisesFromBank();
+      syncSkillTipTrigger();
+    }
+
+    function syncSkillTipTrigger() {
+      skillTipTrigger.hidden = !SKILL_TECHNIQUE_TIP_IDS.has(selectedId);
+    }
+
+    function centerSkillTipDialogInViewport() {
+      if (!skillTipDialog.open) return;
+      const rect = skillTipDialog.getBoundingClientRect();
+      const w = rect.width || skillTipDialog.offsetWidth;
+      const h = rect.height || skillTipDialog.offsetHeight;
+      let boxLeft;
+      let boxTop;
+      let boxW;
+      let boxH;
+      const exercisePane = sentenceGrid;
+      if (exercisePane) {
+        const br = exercisePane.getBoundingClientRect();
+        if (br.width > 0 && br.height > 0) {
+          boxLeft = br.left;
+          boxTop = br.top;
+          boxW = br.width;
+          boxH = br.height;
+        }
+      }
+      if (boxW == null) {
+        const shell = document.querySelector(".app-shell");
+        if (shell) {
+          const br = shell.getBoundingClientRect();
+          if (br.width > 0 && br.height > 0) {
+            boxLeft = br.left;
+            boxTop = br.top;
+            boxW = br.width;
+            boxH = br.height;
+          }
+        }
+      }
+      if (boxW == null) {
+        const vv = window.visualViewport;
+        boxLeft = vv ? vv.offsetLeft : 0;
+        boxTop = vv ? vv.offsetTop : 0;
+        boxW = vv ? vv.width : window.innerWidth;
+        boxH = vv ? vv.height : window.innerHeight;
+      }
+      const left = boxLeft + Math.max(0, Math.round((boxW - w) / 2));
+      const top = boxTop + Math.max(0, Math.round((boxH - h) / 2));
+      const imp = "important";
+      skillTipDialog.style.setProperty("left", left + "px", imp);
+      skillTipDialog.style.setProperty("top", top + "px", imp);
+      skillTipDialog.style.setProperty("right", "auto", imp);
+      skillTipDialog.style.setProperty("bottom", "auto", imp);
+      skillTipDialog.style.setProperty("transform", "none", imp);
+    }
+
+    function scheduleSkillTipDialogCentering() {
+      centerSkillTipDialogInViewport();
+      requestAnimationFrame(() => {
+        centerSkillTipDialogInViewport();
+        requestAnimationFrame(() => centerSkillTipDialogInViewport());
+      });
+      setTimeout(() => centerSkillTipDialogInViewport(), 0);
+      setTimeout(() => centerSkillTipDialogInViewport(), 80);
+    }
+
+    function clearSkillTipDialogViewportPosition() {
+      ["left", "top", "right", "bottom", "transform"].forEach((p) =>
+        skillTipDialog.style.removeProperty(p),
+      );
+    }
+
+    function openSkillTipDialog() {
+      if (!SKILL_TECHNIQUE_TIP_IDS.has(selectedId)) return;
+      advanceStudioTenet();
+      const s = skillById(selectedId);
+      skillTipDialogTitle.textContent = s.title + " — teaching examples";
+      skillTipContent.replaceChildren();
+
+      if (selectedId === "author-stems") {
+        skillTipDialog.classList.add("skill-tip-dialog--author-stems");
+        skillTipIntro.textContent =
+          "Forty stems — pick one and complete the sentence (four columns, ten rows).";
+        const table = document.createElement("table");
+        table.className = "skill-tip-stems-table";
+        const cols = SKILL_TECHNIQUE_AUTHOR_STEMS;
+        for (let i = 0; i < 10; i++) {
+          const tr = document.createElement("tr");
+          for (let c = 0; c < 4; c++) {
+            const td = document.createElement("td");
+            td.textContent = cols[c][i];
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+        skillTipContent.appendChild(table);
+      } else {
+        skillTipDialog.classList.remove("skill-tip-dialog--author-stems");
+        const lines = SKILL_TECHNIQUE_EXAMPLES[selectedId];
+        const hasLines = Array.isArray(lines) && lines.length;
+        skillTipIntro.textContent = hasLines
+          ? "Model or discuss these with the class."
+          : "Add example sentences in index.html: SKILL_TECHNIQUE_EXAMPLES[\"" + selectedId + "\"].";
+        const items = hasLines
+          ? lines
+          : [
+              "No examples yet — push strings into the array for this key (see comment above SKILL_TECHNIQUE_EXAMPLES).",
+            ];
+        const ul = document.createElement("ul");
+        ul.className = "skill-tip-list";
+        items.forEach((text) => {
+          const li = document.createElement("li");
+          li.textContent = text;
+          ul.appendChild(li);
+        });
+        skillTipContent.appendChild(ul);
+      }
+      skillTipDialog.showModal();
+      scheduleSkillTipDialogCentering();
+    }
+
+    function clearSentences() {
+      sentenceGrid.innerHTML = "";
+    }
+
+    function loadExercisesFromBank() {
+      const fb = getAnnotatedExamples(selectedId, selectedLevel);
+      if (!fb.length) {
+        clearSentences();
+        return;
+      }
+      renderSentences(fb);
+    }
+
+    function renderSentences(list) {
+      sentenceGrid.innerHTML = "";
+      const plainCards = SKILLS_PLAIN_CARDS.has(selectedId);
+      list.forEach((text, i) => {
+        const card = document.createElement("article");
+        card.className = "sentence-card";
+        card.dataset.index = String(i + 1);
+        const p = document.createElement("p");
+        let raw = String(text);
+        if (plainCards) raw = stripHighlightMarkers(raw);
+        fillSentenceParagraph(p, raw);
+        card.appendChild(p);
+        sentenceGrid.appendChild(card);
+      });
+    }
+
+    function toast() {}
+
+    function syncThemeToggleTip() {
+      const theme = document.documentElement.getAttribute("data-theme") || "light";
+      themeToggle.setAttribute(
+        "data-tip",
+        theme === "dark" ? "Switch to light mode" : "Switch to dark mode",
+      );
+    }
+
+    function syncPasteToggleTip() {
+      const open = pastePanel && !pastePanel.hidden;
+      pasteToggleBtn.setAttribute("data-tip", open ? "Hide paragraph checker" : "Paragraph checker");
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem(STORAGE.theme);
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const theme = saved || (prefersDark ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+      themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+      syncThemeToggleTip();
+    }
+
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute("data-theme") || "light";
+      const next = cur === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem(STORAGE.theme, next);
+      themeToggle.textContent = next === "dark" ? "☀️" : "🌙";
+      syncThemeToggleTip();
+      advanceStudioTenet();
+    }
+
+    function applyExerciseFontScale(percent) {
+      const n = Number(percent);
+      const scale = Number.isFinite(n) ? n / 100 : 1;
+      const s = String(scale);
+      if (exerciseRegion) exerciseRegion.style.setProperty("--exercise-fs-scale", s);
+      if (pastePanel) pastePanel.style.setProperty("--exercise-fs-scale", s);
+    }
+
+    function initFont() {
+      const v = localStorage.getItem(STORAGE.font);
+      if (v) fontSlider.value = v;
+      applyExerciseFontScale(parseInt(fontSlider.value, 10));
+    }
+
+    fontSlider.addEventListener("input", () => {
+      const n = parseInt(fontSlider.value, 10);
+      applyExerciseFontScale(n);
+      localStorage.setItem(STORAGE.font, String(n));
+    });
+    fontSlider.addEventListener("change", () => advanceStudioTenet());
+
+    themeToggle.addEventListener("click", toggleTheme);
+    teacherExampleAdd?.addEventListener("click", () => {
+      if (!teacherExamplePanel || !teacherExampleInput) return;
+      const willOpen = teacherExamplePanel.hidden;
+      teacherExamplePanel.hidden = !willOpen;
+      const open = !teacherExamplePanel.hidden;
+      teacherExampleAdd.setAttribute("aria-expanded", open ? "true" : "false");
+      const icon = teacherExampleAdd.querySelector("span[aria-hidden]");
+      if (icon) icon.textContent = open ? "×" : "+";
+      teacherExampleAdd.setAttribute(
+        "aria-label",
+        open ? "Close your own example" : "Add your own example for the class",
+      );
+      teacherExampleAdd.title = open ? "Close" : "Add your own example for the class";
+      if (willOpen) teacherExampleInput.focus();
+      advanceStudioTenet();
+    });
+    pasteAnalyzeBtn.addEventListener("click", runPasteAnalysis);
+    pasteToggleBtn.addEventListener("click", () => {
+      setPastePanelOpen(pastePanel.hidden);
+    });
+    pasteParagraphInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        runPasteAnalysis();
+      }
+    });
+    pasteParagraphInput.addEventListener("blur", () => {
+      clearLevelButtonsPressed();
+    });
+
+    function setLevel(level) {
+      selectedLevel = level;
+      localStorage.setItem(STORAGE.level, level);
+      document.querySelectorAll(".level-choice").forEach((btn) => {
+        const on = btn.dataset.level === level;
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+
+    function clearLevelButtonsPressed() {
+      setLevel(selectedLevel);
+    }
+
+    function initLevel() {
+      const saved = localStorage.getItem(STORAGE.level);
+      if (saved === "beginner" || saved === "intermediate" || saved === "advanced") {
+        setLevel(saved);
+      } else {
+        setLevel("beginner");
+      }
+    }
+
+    levelGroup.addEventListener("click", (e) => {
+      const btn = e.target.closest(".level-choice");
+      if (!btn) return;
+      const next = btn.dataset.level;
+      if (next !== selectedLevel) advanceStudioTenet();
+      setLevel(next);
+      loadExercisesFromBank();
+    });
+
+    settingsBtn.addEventListener("click", () => settingsDialog.showModal());
+
+    themeMenuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (themeMenuPanel.hidden) openThemeMenu();
+      else closeThemeMenu();
+    });
+    document.addEventListener("click", (e) => {
+      if (themeMenuWrap.contains(e.target)) return;
+      closeThemeMenu();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      if (!themeMenuPanel.hidden) {
+        closeThemeMenu();
+        themeMenuBtn.focus();
+      }
+    });
+
+    skillTipTrigger.addEventListener("click", openSkillTipDialog);
+    skillTipClose.addEventListener("click", () => skillTipDialog.close());
+    skillTipDialog.addEventListener("click", (e) => {
+      if (e.target === skillTipDialog) skillTipDialog.close();
+    });
+    skillTipDialog.addEventListener("close", () => {
+      skillTipDialog.classList.remove("skill-tip-dialog--author-stems");
+      clearSkillTipDialogViewportPosition();
+    });
+
+    window.addEventListener("resize", () => {
+      closeThemeMenu();
+      if (skillTipDialog.open) centerSkillTipDialogInViewport();
+    });
+
+    hydratePreloadedThemeBanks();
+    renderNav();
+    initLevel();
+    initThemeMenuSelection();
+    selectSkill(selectedId);
+    renderSidebarTenet();
+    initTheme();
+    syncPasteToggleTip();
+    initFont();
+  </script>
+</body>
+</html>
