@@ -953,8 +953,44 @@
     .settings-inner {
       padding: 1.5rem 1.75rem;
     }
-    .settings h4 {
+    .settings-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 0 0 0.15rem;
+    }
+    .settings-header h4 {
       margin: 0;
+      line-height: 1.2;
+    }
+    .settings-close {
+      flex-shrink: 0;
+      width: 2.15rem;
+      height: 2.15rem;
+      margin: -0.2rem -0.35rem 0 0;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-secondary);
+      font-size: 1.35rem;
+      font-weight: 500;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background var(--transition), color var(--transition);
+    }
+    .settings-close:hover {
+      background: color-mix(in srgb, var(--accent) 14%, var(--bg-input));
+      color: var(--text-primary);
+    }
+    .settings-close:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 2px;
+    }
+    .settings h4 {
       font-family: var(--font-display);
       font-size: 1.35rem;
     }
@@ -1480,7 +1516,12 @@
 
   <dialog class="settings" id="settingsDialog">
     <div class="settings-inner">
-      <h4>Settings</h4>
+      <div class="settings-header">
+        <h4>Settings</h4>
+        <button type="button" class="settings-close" id="settingsDialogClose" aria-label="Close settings">
+          ×
+        </button>
+      </div>
       <div class="settings-contact">
         <h5>Book PD or class workshops</h5>
         <p>
@@ -3042,6 +3083,10 @@
     });
 
     settingsBtn.addEventListener("click", () => settingsDialog.showModal());
+
+    document.getElementById("settingsDialogClose")?.addEventListener("click", () => {
+      settingsDialog.close();
+    });
 
     document.getElementById("settingsSignOut")?.addEventListener("click", () => {
       try {
