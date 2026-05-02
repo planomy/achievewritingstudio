@@ -124,13 +124,16 @@
       height: 7.25rem;
       flex-shrink: 0;
       border-radius: 50%;
-      padding: 5px;
-      background: #fff;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+      padding: 2.5px;
+      background: linear-gradient(155deg, #fff7d6 0%, #fcd34d 35%, #eab308 65%, #ca8a04 100%);
+      box-shadow:
+        0 4px 18px rgba(0, 0, 0, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .brand-logo-img {
       display: block;
@@ -139,6 +142,7 @@
       border-radius: 50%;
       object-fit: cover;
       object-position: center;
+      /* Theme PNGs are pre-cropped to inner gold/blue ring in assets */
     }
 
     .skill-nav-label {
@@ -1307,6 +1311,7 @@
       <div class="brand">
         <div class="brand-logo-frame">
           <img
+            id="brandLogoImg"
             class="brand-logo-img"
             src="assets/achieve-logo-mark.png"
             width="200"
@@ -1798,6 +1803,41 @@
       intermediate: "II (Yrs 5–8)",
       advanced: "III (Yrs 9–12)",
     };
+
+    /** Sidebar badge art per shipped theme (PNG under assets/). Custom / unknown themes use Achieve mark. */
+    const BRAND_DEFAULT_LOGO_SRC = "assets/achieve-logo-mark.png";
+    const BRAND_DEFAULT_LOGO_ALT = "Achieve — A+ writing mark";
+    const THEME_BRAND_LOGOS = {
+      default: {
+        src: "assets/theme-default.png",
+        alt: "Achieve Writing Studio — default example pack",
+      },
+      "the-market": { src: "assets/theme-the-market.png", alt: "The Market — themed examples" },
+      "ancient-lands": { src: "assets/theme-ancient-lands.png", alt: "Ancient Lands — themed examples" },
+      "the-pirate-lord": { src: "assets/theme-the-pirate-lord.png", alt: "The Pirate Lord — themed examples" },
+      "the-monsters-lair": { src: "assets/theme-the-monsters-lair.png", alt: "The Monster's Lair — themed examples" },
+      "the-deep": { src: "assets/theme-the-deep.png", alt: "The Deep — themed examples" },
+      stranded: { src: "assets/theme-stranded.png", alt: "Stranded — themed examples" },
+    };
+
+    function syncBrandLogo() {
+      const img = document.getElementById("brandLogoImg");
+      if (!img) return;
+      if (sessionStorage.getItem(STORAGE.themePackTitle)) {
+        img.src = BRAND_DEFAULT_LOGO_SRC;
+        img.alt = BRAND_DEFAULT_LOGO_ALT;
+        return;
+      }
+      const id = sessionStorage.getItem(STORAGE.themeMenuId) || "default";
+      const meta = THEME_BRAND_LOGOS[id];
+      if (meta && meta.src) {
+        img.src = meta.src;
+        img.alt = meta.alt;
+      } else {
+        img.src = BRAND_DEFAULT_LOGO_SRC;
+        img.alt = BRAND_DEFAULT_LOGO_ALT;
+      }
+    }
 
     /** Ordered theme picker entries; extend via registerThemeMenuEntry(id, label) plus registerExampleTheme. */
     const THEME_MENU = [
@@ -2472,6 +2512,7 @@
         closeThemeMenu();
         toast(meta.label + ".");
       }
+      syncBrandLogo();
     }
 
     function initThemeMenuSelection() {
@@ -2486,6 +2527,7 @@
       }
       sessionStorage.removeItem(STORAGE.themePackTitle);
       renderThemeMenuPanel();
+      syncBrandLogo();
     }
 
     function registerThemeMenuEntry(id, label) {
@@ -2501,6 +2543,7 @@
       sessionStorage.setItem(STORAGE.themePackTitle, title || "Custom theme pack");
       loadExercisesFromBank();
       renderThemeMenuPanel();
+      syncBrandLogo();
     }
 
     function resetExampleBankToDefault() {
@@ -2521,6 +2564,7 @@
       sessionStorage.removeItem(STORAGE.themePackTitle);
       loadExercisesFromBank();
       renderThemeMenuPanel();
+      syncBrandLogo();
       return true;
     }
 
