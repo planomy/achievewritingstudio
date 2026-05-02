@@ -448,6 +448,24 @@
       cursor: pointer;
     }
 
+    .toolbar-select {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.32rem 1.65rem 0.32rem 0.5rem;
+      cursor: pointer;
+      min-width: 3rem;
+      accent-color: var(--accent);
+    }
+    .toolbar-select:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
     .icon-btn {
       width: 2.4rem;
       height: 2.4rem;
@@ -812,7 +830,7 @@
       font-weight: 700;
       font-size: calc(2.25rem * var(--exercise-fs-scale, 1));
       color: var(--accent);
-      opacity: 0.35;
+      opacity: 0.14;
       line-height: 1;
     }
     .sentence-card p {
@@ -1390,6 +1408,22 @@
             <label for="fontSlider">Display text size</label>
             <input type="range" id="fontSlider" min="85" max="160" value="100" />
           </div>
+          <div class="control-group" title="How many example cards to show for this skill (chosen at random from the bank)">
+            <label for="exampleCountSelect">Examples</label>
+            <select id="exampleCountSelect" class="toolbar-select" aria-describedby="exampleCountHint">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4" selected>4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <span id="exampleCountHint" class="sr-only">Random sample from the example bank for the current skill and level.</span>
+          </div>
         </div>
         <div class="main-toolbar-tenet" aria-live="polite">
           <p class="main-toolbar-tenet-text" id="toolbarTenetText"></p>
@@ -1896,9 +1930,13 @@
       theme: "achieve_theme",
       font: "achieve_font_scale",
       level: "achieve_level",
+      exampleCount: "achieve_example_count",
       themePackTitle: "achieve_theme_pack_title",
       themeMenuId: "achieve_example_theme_menu",
     };
+
+    const EXAMPLE_COUNT_MIN = 1;
+    const EXAMPLE_COUNT_MAX = 10;
 
     let selectedId = KEY_SKILLS[0].id;
     let selectedLevel = "beginner";
@@ -1945,6 +1983,7 @@
     const pasteResultCard = document.getElementById("pasteResultCard");
     const pasteResultParagraph = document.getElementById("pasteResultParagraph");
     const fontSlider = document.getElementById("fontSlider");
+    const exampleCountSelect = document.getElementById("exampleCountSelect");
     const themeToggle = document.getElementById("themeToggle");
     const settingsBtn = document.getElementById("settingsBtn");
     const settingsDialog = document.getElementById("settingsDialog");
@@ -2641,10 +2680,17 @@
       return out;
     }
 
+    function getDesiredExampleCount() {
+      const raw = exampleCountSelect ? parseInt(exampleCountSelect.value, 10) : 4;
+      if (!Number.isFinite(raw)) return 4;
+      return Math.min(EXAMPLE_COUNT_MAX, Math.max(EXAMPLE_COUNT_MIN, raw));
+    }
+
     function getAnnotatedExamples(skillId, level) {
       const pool = getExamplePool(skillId, level);
       const poolSize = pool.length;
-      return pickRandomFromPool(pool, 4).map(({ plain, poolIndex }) => ({
+      const count = getDesiredExampleCount();
+      return pickRandomFromPool(pool, count).map(({ plain, poolIndex }) => ({
         text: annotateSentence(skillId, plain),
         exampleNum: poolIndex,
         poolSize,
@@ -3021,6 +3067,22 @@
       applyExerciseFontScale(parseInt(fontSlider.value, 10));
     }
 
+    function initExampleCount() {
+      if (!exampleCountSelect) return;
+      const v = localStorage.getItem(STORAGE.exampleCount);
+      const n = v != null ? parseInt(v, 10) : NaN;
+      if (Number.isFinite(n) && n >= EXAMPLE_COUNT_MIN && n <= EXAMPLE_COUNT_MAX) {
+        exampleCountSelect.value = String(n);
+      }
+    }
+
+    exampleCountSelect?.addEventListener("change", () => {
+      if (!exampleCountSelect) return;
+      localStorage.setItem(STORAGE.exampleCount, exampleCountSelect.value);
+      loadExercisesFromBank();
+      advanceStudioTenet();
+    });
+
     fontSlider.addEventListener("input", () => {
       const n = parseInt(fontSlider.value, 10);
       applyExerciseFontScale(n);
@@ -3142,6 +3204,7 @@
     renderNav();
     initLevel();
     initThemeMenuSelection();
+    initExampleCount();
     selectSkill(selectedId);
     renderStudioTenet();
     initTheme();
