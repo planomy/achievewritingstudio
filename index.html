@@ -1638,7 +1638,7 @@
     }
 
     const KEY_SKILLS = [
-      { id: "predictable-starts", title: "Predictable starts", coreFix: "Rewrite sentence beginnings — avoid over-using The It A An He She His Her This They Then There at the start of a sentence." },
+      { id: "predictable-starts", title: "Predictable starts", coreFix: "Rewrite sentence beginnings — avoid over-using The It A An He She His Her This They Then There These at the start of a sentence." },
       { id: "weak-be", title: 'Passive to-be verbs', coreFix: "Targets: was, were, hadn't, wasn't, weren't, had, have, haven't, be, been, being — tighten where they flatten energy." },
       { id: "basic-verbs", title: "Basic verb use", coreFix: "Choose precise, vivid verbs — one strong verb beats a pile of ordinary ones." },
       { id: "repetition", title: "Noun / verb repetition", coreFix: "Repeating key nouns or verbs in a sentence or adjacent sentences is lazy - use synonyms or restructure sentences." },
@@ -2132,7 +2132,7 @@
       }
       /* One starter token only (not "The fleet…") — matches skill list: The It A An He She His Her This They Then There + We You I */
       const starter = s.match(
-        /^(The|There|Then|This|They|It|He|She|His|Her|We|You|I|A|An)\b/i
+        /^(The|There|Then|This|These|They|It|He|She|His|Her|We|You|I|A|An)\b/i
       );
       if (starter) return "**" + starter[1] + "**" + s.slice(starter[1].length);
       return s;
