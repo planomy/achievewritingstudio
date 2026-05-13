@@ -493,7 +493,7 @@ globalThis.ACHIEVE_PRELOAD_THEME_BANKS["stranded"] = {
         "For a moment, the sound of the helicopter ...",
         "Long before the others woke, she had already ...",
         "Somewhere below, the sound of running water meant ...",
-        "With hands she could barely control, she ...",
+        "With the tide line closer than it had been that morning, she ...",
         "Somewhere between exhaustion and determination, she ...",
         "In the space of a single second, everything ...",
         "What she had not prepared for was the way ...",

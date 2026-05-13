@@ -481,7 +481,7 @@ globalThis.ACHIEVE_PRELOAD_THEME_BANKS["ancient-lands"] = {
         "For a moment, the whole city seemed to ...",
         "Long before the army arrived, she had already ...",
         "Behind the sealed door, something ...",
-        "With hands she could not quite keep still, she opened ...",
+        "With the seal broken and sand still falling from the lintel, she opened ...",
         "Somewhere between the gate and the archive, she realised ...",
         "In the space of a single moment, everything changed because ...",
         "What she had not prepared for was the way the elder looked at her when ...",

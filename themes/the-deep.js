@@ -491,7 +491,7 @@ globalThis.ACHIEVE_PRELOAD_THEME_BANKS["the-deep"] = {
         "For a moment, the sound seemed to ...",
         "Long before the others noticed, she had already ...",
         "Below the surface, something ...",
-        "With hands that would not stop shaking, she ...",
+        "With the last coin of daylight narrowing above her, she ...",
         "Somewhere between fear and wonder, she realised ...",
         "In the space of a single breath, the water ...",
         "What she had not prepared for was the way the dark ...",

@@ -481,7 +481,7 @@ globalThis.ACHIEVE_PRELOAD_THEME_BANKS["the-market"] = {
         "For a moment, the whole place seemed to ...",
         "Long before she reached the back row, she had already ...",
         "Behind the last stall, something ...",
-        "With hands she could not quite keep still, she reached for ...",
+        "Between two stalls arguing over prices she could not follow, she reached for ...",
         "Somewhere between the entrance and the far end, she realised ...",
         "In the space of a single second, everything around her ...",
         "What she had not prepared for was the way he looked at her when ...",

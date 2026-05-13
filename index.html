@@ -880,12 +880,45 @@
       flex-direction: column;
       gap: 1.45rem;
     }
-    .paste-panel h4 {
+    .paste-panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 0;
+    }
+    .paste-panel-header h4 {
       margin: 0;
       font-family: var(--font-display);
       font-size: 1.2rem;
       font-weight: 700;
       color: var(--text-primary);
+    }
+    .paste-panel-close {
+      flex-shrink: 0;
+      width: 2.15rem;
+      height: 2.15rem;
+      margin: -0.2rem -0.35rem 0 0;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-secondary);
+      font-size: 1.35rem;
+      font-weight: 500;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background var(--transition), color var(--transition);
+    }
+    .paste-panel-close:hover {
+      background: color-mix(in srgb, var(--accent) 14%, var(--bg-input));
+      color: var(--text-primary);
+    }
+    .paste-panel-close:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 2px;
     }
     .paste-textarea {
       box-sizing: border-box;
@@ -1493,7 +1526,12 @@
       </section>
 
       <section class="paste-panel" id="pastePanel" aria-labelledby="pasteHeading" hidden>
-        <h4 id="pasteHeading">Check your own paragraph</h4>
+        <div class="paste-panel-header">
+          <h4 id="pasteHeading">Check your own paragraph</h4>
+          <button type="button" class="paste-panel-close" id="pastePanelClose" aria-label="Close paragraph checker">
+            ×
+          </button>
+        </div>
         <label class="sr-only" for="pasteParagraphInput">Paragraph to analyse</label>
         <textarea
           id="pasteParagraphInput"
@@ -1977,6 +2015,7 @@
     const teacherExampleInput = document.getElementById("teacherExampleInput");
     const pastePanel = document.getElementById("pastePanel");
     const pasteToggleBtn = document.getElementById("pasteToggleBtn");
+    const pastePanelClose = document.getElementById("pastePanelClose");
     const pasteParagraphInput = document.getElementById("pasteParagraphInput");
     const pasteAnalyzeBtn = document.getElementById("pasteAnalyzeBtn");
     const pasteSkillNote = document.getElementById("pasteSkillNote");
@@ -2104,8 +2143,8 @@
       "Without warning, the ",
       "Long before the others noticed, ",
       "Behind her, the sound of footsteps meant that ",
-      "With hands that would not stop shaking, ",
-      "With hands she could not keep still, ",
+      "With the kind of calm that only arrives after the worst is certain, ",
+      "Across the distance between what she said and what she meant, ",
       "In the space of a single second, ",
       "In the years that followed, ",
       "Somewhere between fear and fury, ",
@@ -2203,12 +2242,124 @@
       return wrapAllMatches(text, new RegExp("(" + alt + ")", "gi"));
     }
 
+    /**
+     * Manner / intensifier adverbs — not naive "ends in ly" (reply, scraggly, friendly, fly…).
+     * Uses a denylist, plus skips *ggly / *bbly shapes common for adjectives (scraggly, wobbly).
+     */
+    const ADVERB_LY_FALSE_POSITIVES = new Set(
+      [
+        "ally",
+        "apply",
+        "assembly",
+        "beastly",
+        "belly",
+        "billy",
+        "brotherly",
+        "bully",
+        "burly",
+        "chilly",
+        "comely",
+        "comply",
+        "costly",
+        "cowardly",
+        "crinkly",
+        "cuddly",
+        "curly",
+        "daily",
+        "dally",
+        "daughterly",
+        "deadly",
+        "disorderly",
+        "doily",
+        "early",
+        "earthly",
+        "elderly",
+        "emily",
+        "family",
+        "fatherly",
+        "fiddly",
+        "filly",
+        "friendly",
+        "frilly",
+        "gentlemanly",
+        "ghastly",
+        "ghostly",
+        "giggly",
+        "gully",
+        "heavenly",
+        "hillbilly",
+        "hilly",
+        "holly",
+        "holy",
+        "homely",
+        "hourly",
+        "imply",
+        "italy",
+        "jelly",
+        "jiggly",
+        "jolly",
+        "july",
+        "kelly",
+        "knobbly",
+        "lonely",
+        "lovely",
+        "lowly",
+        "manly",
+        "measly",
+        "miserly",
+        "monthly",
+        "motherly",
+        "multiply",
+        "nightly",
+        "only",
+        "orderly",
+        "pebbly",
+        "polly",
+        "rally",
+        "reply",
+        "sally",
+        "scholarly",
+        "shapely",
+        "sickly",
+        "silly",
+        "silvery",
+        "sisterly",
+        "snuggly",
+        "sparkly",
+        "sprightly",
+        "sully",
+        "supply",
+        "surly",
+        "tally",
+        "timely",
+        "tinkly",
+        "ugly",
+        "unearthly",
+        "unlikely",
+        "unruly",
+        "weekly",
+        "willy",
+        "womanly",
+        "worldly",
+        "wriggly",
+        "wrinkly",
+      ].map((w) => w.toLowerCase()),
+    );
+
+    function shouldSkipLyToken(raw) {
+      const w = raw.toLowerCase();
+      if (ADVERB_LY_FALSE_POSITIVES.has(w)) return true;
+      // Adjective-style coinages (scraggly, wriggly, snuggly); avoids "marginally", "legally".
+      if (/[a-z]ggly$/i.test(raw)) return true;
+      if (/[a-z]bbly$/i.test(raw)) return true;
+      return false;
+    }
+
     function annotateAdverbs(text) {
-      const skip = new Set(["family", "early", "only", "ugly", "supply", "July"]);
       return text.split(/(\*\*[^*]*\*\*)/g).map((part, i) => {
         if (i % 2 === 1) return part;
-        return part.replace(/\b(\w+ly|very|really|absolutely|quite|too)\b/gi, (m) => {
-          if (/ly$/i.test(m) && skip.has(m.toLowerCase())) return m;
+        return part.replace(/\b([a-zA-Z]{2,}ly|very|really|absolutely|quite|too)\b/gi, (m) => {
+          if (/ly$/i.test(m) && shouldSkipLyToken(m)) return m;
           return "**" + m + "**";
         });
       }).join("");
@@ -2804,6 +2955,13 @@
         requestAnimationFrame(() => pasteParagraphInput.focus());
       } else {
         setLevel(selectedLevel);
+        pasteToggleBtn.focus();
+        pasteCombinedPlain = null;
+        pasteCombinedSegments = null;
+        pasteSkillHits = new Set();
+        pasteFilterSkillId = null;
+        updatePasteSkillNavClasses();
+        renderPasteCombinedOutput();
       }
       syncPasteToggleTip();
       advanceStudioTenet();
@@ -3110,6 +3268,9 @@
     pasteAnalyzeBtn.addEventListener("click", runPasteAnalysis);
     pasteToggleBtn.addEventListener("click", () => {
       setPastePanelOpen(pastePanel.hidden);
+    });
+    pastePanelClose?.addEventListener("click", () => {
+      setPastePanelOpen(false);
     });
     pasteParagraphInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
